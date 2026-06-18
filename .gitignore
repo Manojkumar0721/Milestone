@@ -1,0 +1,10 @@
+# backend
+backend/target/
+backend/data/
+*.log
+*.err
+
+# frontend
+frontend/node_modules/
+frontend/dist/
+frontend/dev-dist/
