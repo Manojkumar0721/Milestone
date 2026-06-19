@@ -15,6 +15,8 @@ import GoalForm from './components/GoalForm'
 import EmptyState from './components/EmptyState'
 import FinishOverlay from './components/FinishOverlay'
 import Confetti from './components/Confetti'
+import InstallApp from './components/InstallApp'
+import AppIcon from './components/AppIcons'
 
 const STATUS_FLOW = { todo: 'active', active: 'done', done: 'todo' }
 
@@ -38,6 +40,14 @@ function Dashboard({ user }) {
   const [finishGoal, setFinishGoal] = useState(null)
   const [form, setForm] = useState(null) // 'create' | 'edit' | null
   const [mobileTab, setMobileTab] = useState('journey')
+  // Offer to install the app on first sign-in per device — unless it's already
+  // installed (standalone) or the prompt was dismissed before.
+  const [showInstall, setShowInstall] = useState(() => {
+    if (localStorage.getItem('milestone.installSeen')) return false
+    const standalone =
+      window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true
+    return !standalone
+  })
   const isMobile = useMediaQuery('(max-width: 880px)')
 
   const goal = goals.find((g) => g.id === activeGoalId) || goals[0]
@@ -78,6 +88,11 @@ function Dashboard({ user }) {
     }
     prevById.current[goal.id] = progress
   }, [progress, goal])
+
+  const closeInstall = () => {
+    setShowInstall(false)
+    localStorage.setItem('milestone.installSeen', '1')
+  }
 
   // Run an API mutation, surfacing any error as a transient banner.
   async function call(fn) {
@@ -174,10 +189,16 @@ function Dashboard({ user }) {
         {apiError && <div className="api-error-banner">{apiError}</div>}
         <div className="topbar topbar-split">
           <Brand />
-          <button className="link-btn" onClick={logout}>Sign out</button>
+          <div className="topbar-actions">
+            <button className="link-btn link-btn-icon" onClick={() => setShowInstall(true)}>
+              <AppIcon name="download" size={15} /> Get the app
+            </button>
+            <button className="link-btn" onClick={logout}>Sign out</button>
+          </div>
         </div>
         <EmptyState onCreate={() => setForm('create')} />
         {form && <GoalForm onSave={createGoal} onCancel={() => setForm(null)} />}
+        {showInstall && <InstallApp onClose={closeInstall} />}
       </div>
     )
   }
@@ -282,6 +303,9 @@ function Dashboard({ user }) {
               <button className="btn-primary new-goal-btn" onClick={() => setForm('create')}>
                 + New goal
               </button>
+              <button className="install-link m-install" onClick={() => setShowInstall(true)}>
+                <AppIcon name="download" size={16} /> Get the app
+              </button>
               <div className="user-box">
                 <span className="user-avatar">{initials}</span>
                 <span className="user-meta">
@@ -311,6 +335,7 @@ function Dashboard({ user }) {
         {form === 'edit' && (
           <GoalForm initial={goal} onSave={saveGoalEdit} onCancel={() => setForm(null)} />
         )}
+        {showInstall && <InstallApp onClose={closeInstall} />}
       </div>
     )
   }
@@ -331,6 +356,7 @@ function Dashboard({ user }) {
           setSelectedMs(null)
         }}
         onNew={() => setForm('create')}
+        onGetApp={() => setShowInstall(true)}
       />
 
       <div className="content">
@@ -385,12 +411,13 @@ function Dashboard({ user }) {
       {form === 'edit' && (
         <GoalForm initial={goal} onSave={saveGoalEdit} onCancel={() => setForm(null)} />
       )}
+      {showInstall && <InstallApp onClose={closeInstall} />}
     </div>
   )
 }
 
 
-function GoalSidebar({ goals, activeId, user, onLogout, onSelect, onNew }) {
+function GoalSidebar({ goals, activeId, user, onLogout, onSelect, onNew, onGetApp }) {
   const initials = (user.name || user.email || '?')
     .split(/\s+/)
     .map((s) => s[0])
@@ -420,6 +447,9 @@ function GoalSidebar({ goals, activeId, user, onLogout, onSelect, onNew }) {
         })}
       </nav>
       <button className="btn-primary new-goal-btn" onClick={onNew}>+ New goal</button>
+      <button className="install-link" onClick={onGetApp}>
+        <AppIcon name="download" size={16} /> Get the app
+      </button>
 
       <div className="user-box">
         <span className="user-avatar">{initials}</span>

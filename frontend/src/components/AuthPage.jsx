@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import Brand from './Brand'
+import AppIcon from './AppIcons'
+import InstallApp from './InstallApp'
 import { useAuth } from '../auth/AuthContext'
 
 export default function AuthPage() {
   const { login, register } = useAuth()
   const [mode, setMode] = useState('login') // 'login' | 'register'
+  const [showInstall, setShowInstall] = useState(false)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -92,7 +95,15 @@ export default function AuthPage() {
           </button>
         </p>
 
+        <div className="auth-download">
+          <button type="button" className="install-link" onClick={() => setShowInstall(true)}>
+            <AppIcon name="download" size={16} />
+            Download the app for Android, iPhone &amp; desktop
+          </button>
+        </div>
       </div>
+
+      {showInstall && <InstallApp onClose={() => setShowInstall(false)} />}
     </div>
   )
 }
