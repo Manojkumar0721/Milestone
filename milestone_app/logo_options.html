@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milestone — Logo Options</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0b1020;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    padding: 40px 20px;
+    color: #e7ecf5;
+  }
+  h1 { text-align: center; font-size: 24px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .sub { text-align: center; color: #64748b; font-size: 13px; margin-bottom: 40px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 30px 20px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .card:hover {
+    border-color: #6366f1;
+    background: rgba(99,102,241,0.06);
+    transform: translateY(-2px);
+  }
+  .card.selected {
+    border-color: #6366f1;
+    background: rgba(99,102,241,0.1);
+    box-shadow: 0 0 20px rgba(99,102,241,0.15);
+  }
+  .card svg {
+    display: block;
+    margin: 0 auto 16px;
+  }
+  .card-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #c7d2fe;
+  }
+  .card-desc {
+    font-size: 11.5px;
+    color: #64748b;
+    line-height: 1.5;
+  }
+  .card-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 10px;
+    font-size: 10px;
+    border-radius: 99px;
+    background: rgba(99,102,241,0.15);
+    color: #a5b4fc;
+  }
+</style>
+</head>
+<body>
+
+<h1>🏁 Milestone — Logo Concepts</h1>
+<p class="sub">Click any logo to select it, then let me know which one you like (or share feedback to refine)</p>
+
+<div class="grid" id="logoGrid">
+
+  <!-- Concept A: Current/Refined -->
+  <div class="card" onclick="select(this)">
+    <svg viewBox="0 0 80 80" width="80" height="80">
+      <defs>
+        <linearGradient id="a" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stop-color="#6366f1"/>
+          <stop offset="1" stop-color="#f472b6"/>
+        </linearGradient>
+      </defs>
+      <rect width="80" height="80" rx="20" fill="url(#a)"/>
+      <path d="M22 60 C 38 54, 34 36, 44 30 S 54 20, 58 20"
+            fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="22" cy="60" r="4.5" fill="#fff"/>
+      <circle cx="58" cy="20" r="6" fill="#fff"/>
+    </svg>
+    <div class="card-name">A — Refined Path</div>
+    <div class="card-desc">Same journey-path concept, polished with smoother curves and bolder nodes.</div>
+    <div class="card-badge" style="background:rgba(99,102,241,0.15);color:#a5b4fc">Current style</div>
+  </div>
+
+  <!-- Concept B: Flag / Finish Line -->
+  <div class="card" onclick="select(this)">
+    <svg viewBox="0 0 80 80" width="80" height="80">
+      <defs>
+        <linearGradient id="b" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stop-color="#6366f1"/>
+          <stop offset="1" stop-color="#a78bfa"/>
+        </linearGradient>
+      </defs>
+      <rect width="80" height="80" rx="20" fill="url(#b)"/>
+      <line x1="20" y1="60" x2="20" y2="22" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M20 22 L 56 22 L 48 34 L 56 46 L 20 46" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="20" cy="60" r="4" fill="#fff"/>
+    </svg>
+    <div class="card-name">B — Checkered Flag</div>
+    <div class="card-desc">Racing finish-line flag. Clear goal/achievement metaphor.</div>
+    <div class="card-badge" style="background:rgba(168,85,247,0.15);color:#c084fc">Bold</div>
+  </div>
+
+  <!-- Concept C: Mountain Peak -->
+  <div class="card" onclick="select(this)">
+    <svg viewBox="0 0 80 80" width="80" height="80">
+      <defs>
+        <linearGradient id="c" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stop-color="#6366f1"/>
+          <stop offset="1" stop-color="#22c55e"/>
+        </linearGradient>
+      </defs>
+      <rect width="80" height="80" rx="20" fill="url(#c)"/>
+      <polygon points="40,14 60,56 20,56" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/>
+      <line x1="40" y1="14" x2="40" y2="28" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="40" cy="28" r="4" fill="#fff"/>
+      <path d="M26 52 Q 33 44 40 50 Q 47 56 54 48" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+    </svg>
+    <div class="card-name">C — Mountain Summit</div>
+    <div class="card-desc">Reaching the peak. Progress is a climb with a clear summit.</div>
+    <div class="card-badge" style="background:rgba(34,197,94,0.15);color:#4ade80">Adventurous</div>
+  </div>
+
+  <!-- Concept D: Compass / Waypoint -->
+  <div class="card" onclick="select(this)">
+    <svg viewBox="0 0 80 80" width="80" height="80">
+      <defs>
+        <linearGradient id="d" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stop-color="#f472b6"/>
+          <stop offset="1" stop-color="#6366f1"/>
+        </linearGradient>
+      </defs>
+      <rect width="80" height="80" rx="20" fill="url(#d)"/>
+      <circle cx="40" cy="40" r="22" fill="none" stroke="#fff" stroke-width="3"/>
+      <line x1="40" y1="18" x2="40" y2="30" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="40" y1="50" x2="40" y2="62" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="18" y1="40" x2="30" y2="40" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="50" y1="40" x2="62" y2="40" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="40" cy="40" r="5" fill="#fff"/>
+      <path d="M36 40 L 50 34 L 44 48 Z" fill="rgba(255,255,255,0.4)"/>
+    </svg>
+    <div class="card-name">D — Compass</div>
+    <div class="card-desc">Finding direction. Navigating toward your destination.</div>
+    <div class="card-badge" style="background:rgba(244,114,182,0.15);color:#f9a8d4">Directional</div>
+  </div>
+
+  <!-- Concept E: Stacked Milestones -->
+  <div class="card" onclick="select(this)">
+    <svg viewBox="0 0 80 80" width="80" height="80">
+      <defs>
+        <linearGradient id="e" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stop-color="#22c55e"/>
+          <stop offset="1" stop-color="#6366f1"/>
+        </linearGradient>
+      </defs>
+      <rect width="80" height="80" rx="20" fill="url(#e)"/>
+      <rect x="20" y="22" width="40" height="8" rx="4" fill="rgba(255,255,255,0.2)"/>
+      <rect x="18" y="32" width="44" height="8" rx="4" fill="rgba(255,255,255,0.4)"/>
+      <rect x="22" y="42" width="36" height="8" rx="4" fill="rgba(255,255,255,0.65)"/>
+      <rect x="16" y="52" width="48" height="8" rx="4" fill="#fff"/>
+      <polygon points="40,64 46,58 34,58" fill="#fff"/>
+    </svg>
+    <div class="card-name">E — Stacked Progress</div>
+    <div class="card-desc">Milestones building upward. Cumulative progress toward a goal.</div>
+    <div class="card-badge" style="background:rgba(34,197,94,0.15);color:#4ade80">Progressive</div>
+  </div>
+
+  <!-- Concept F: Bullseye / Target -->
+  <div class="card" onclick="select(this)">
+    <svg viewBox="0 0 80 80" width="80" height="80">
+      <defs>
+        <linearGradient id="f" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stop-color="#ef4444"/>
+          <stop offset="1" stop-color="#f472b6"/>
+        </linearGradient>
+      </defs>
+      <rect width="80" height="80" rx="20" fill="url(#f)"/>
+      <circle cx="40" cy="40" r="28" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="3"/>
+      <circle cx="40" cy="40" r="20" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="3"/>
+      <circle cx="40" cy="40" r="12" fill="none" stroke="#fff" stroke-width="3.5"/>
+      <circle cx="40" cy="40" r="5" fill="#fff"/>
+      <path d="M33 40 L 38 37 L 38 43 Z" fill="#ef4444"/>
+    </svg>
+    <div class="card-name">F — Bullseye</div>
+    <div class="card-desc">Hit your target. Simple, focused, and instantly recognizable.</div>
+    <div class="card-badge" style="background:rgba(239,68,68,0.15);color:#fca5a5">Focused</div>
+  </div>
+
+</div>
+
+<p style="text-align:center;margin-top:30px;color:#4b5563;font-size:12px">
+  Click a logo to highlight it, then tell me which letter you prefer. I can also tweak any option — different colors, simplify it, etc.
+</p>
+
+<script>
+  function select(el) {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+
+</body>
+</html>

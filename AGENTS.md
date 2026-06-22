@@ -1,78 +1,59 @@
-# Milestone — Agent Guide
+# AGENTS.md — Milestone
 
-## Structure
+Two independent projects in one repo — a Spring Boot API and a React SPA. No monorepo tooling.
 
-```
-backend/   — Spring Boot 3.3.5, Java 21, Maven
-frontend/  — Vite 8 + React 19 (JSX, no TypeScript), PWA
-```
+## Directories
 
-## Backend
+| Path | What | Entrypoint |
+|------|------|-----------|
+| `backend/` | Java 21 + Spring Boot 3.3.5 + Maven | `com.milestone.MilestoneApplication` |
+| `frontend/` | React 19 + Vite 8 (plain JS, **not** TypeScript) | `src/main.jsx` |
 
-- **Entrypoint:** `com.milestone.MilestoneApplication` (`src/main/java/...`)
-- **API base:** `/api` — all endpoints return JSON
-- **Auth:** JWT via `jjwt 0.12.6`. Public: `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`. Everything else requires `Authorization: Bearer <token>`.
-- **DB:** MySQL by default. Config via env vars `MYSQL_URL` (full JDBC URL, e.g. Aiven/PlanetScale) or individual `DB_HOST`/`DB_PORT`/`DB_NAME`/`DB_USER`/`DB_PASSWORD`.
-- **Port:** Uses `PORT` env var (Render) with `8080` fallback.
-- **CORS:** Allows `localhost:5173`–`5176` by default. Override via `APP_CORS_ORIGINS` env.
-- **JWT config:** `APP_JWT_SECRET`, `APP_JWT_TTL` env vars (dev defaults in `application.properties`).
-- **Lombok** on all entities — getters/setters are generated.
-- **All mutation endpoints** return the full updated `GoalDto` — the frontend swaps it in-place.
-- **Requires JDK 21+** — set `JAVA_HOME` accordingly (e.g. `C:\Program Files\Java\jdk-23`).
-- **No tests exist** (no `src/test` directory).
-- **Docker build:** `docker build -t milestone-api .` (uses multi-stage, outputs JAR)
+## Backend commands (from `backend/`)
 
-### Commands
+| Command | What |
+|---------|------|
+| `mvn spring-boot:run` | Dev server on `:8080` |
+| `mvn spring-boot:run -Dspring-boot.run.profiles=mysql` | Switch to MySQL |
+| `mvn compile` | Compile check |
+| `mvn test` | Run tests |
 
-```sh
-cd backend
-mvn spring-boot:run                          # dev server on :8080 (MySQL)
-mvn compile                                  # build
-```
+Backend has **no tests yet** (`src/test/` does not exist). Dev DB is H2 file at `./data/milestonedb.mv.db`. Browse at `http://localhost:8080/h2-console`.
 
-## Frontend
+JWT secret and TTL via `APP_JWT_SECRET` / `APP_JWT_TTL` env vars (dev defaults in `application.properties`).
 
-- **Entrypoint:** `src/main.jsx` → `App.jsx`
-- **API client:** `src/api/client.js` — `VITE_API_URL` env var (default `http://localhost:8080/api`).
-- **Auth context:** `src/auth/AuthContext.jsx` — JWT persisted in `localStorage` key `milestone.token`.
-- **PWA:** Enabled via `vite-plugin-pwa` (auto-update). Outputs to `dev-dist/` in dev mode.
-- **State management:** React hooks + prop drilling (no Redux/Zustand).
-- **No tests exist.**
+## Frontend commands (from `frontend/`)
 
-### Commands
+| Command | What |
+|---------|------|
+| `npm run dev` | Vite dev server on `:5173` |
+| `npm run build` | Production build to `dist/` |
+| `npm run lint` | ESLint (JS/JSX only) |
+| `npm run preview` | Preview production build |
 
-```sh
-cd frontend
-npm install          # install deps
-npm run dev          # Vite dev server (default :5173)
-npm run build        # production build to dist/
-npm run lint         # ESLint (flat config)
-npm run preview      # preview production build
-```
+No typecheck step (plain JS). No test framework installed.
 
-## Deployment
+## Dev workflow
 
-### Backend — Render (free tier)
-1. Push repo to GitHub
-2. Render → New Web Service → connect repo → select **Docker** runtime
-3. Set env vars: `MYSQL_URL`, `APP_JWT_SECRET`, `APP_CORS_ORIGINS`
-4. Free tier spins down after inactivity (cold start on first request)
+1. Start backend (`mvn spring-boot:run`) — runs on `:8080`
+2. Start frontend (`npm run dev`) — runs on `:5173`, proxies API calls to `:8080/api`
+3. Frontend env var `VITE_API_URL` overrides API base URL (default `http://localhost:8080/api`)
 
-### Frontend — Vercel (free tier)
-1. Vercel → Add New Project → import repo → set root to `frontend/`
-2. Env var: `VITE_API_URL=https://your-backend.onrender.com/api`
-3. Build: `npm run build`, output: `dist/`
-4. `vercel.json` handles SPA client-side routing
+## API conventions
 
-### MySQL — Aiven (free tier)
-1. Aiven → Create MySQL → **Free** plan (1 GB, auto-pause)
-2. Once created, copy the **JDBC URI** and set as `MYSQL_URL` on Render
-3. Enable `ssl-mode=REQUIRED` in the URI if Aiven requires it
+- All routes under `/api` prefix
+- JWT in `Authorization: Bearer <token>` header
+- Token persisted in `localStorage` under key `milestone.token`
+- Auth endpoints: `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`
+- CRUD at `/api/goals`, `/api/goals/:id/milestones`, `/api/milestones/:id/tasks`, `/api/tasks/:id`
+- Milestone reorder: `PUT /api/milestones/:id/move?dir=up|down`
+- 204 response for DELETE; error body `{ "error": "..." }`
 
-## conventions
+## Notable quirks
 
-- Frontend is **JSX only** — no `.ts`/`.tsx`. Don't add TypeScript.
-- Backend uses **Lombok** (`@Getter`, `@Setter`) — don't write manual getters/setters.
-- Vite config uses **Oxc** (via `@vitejs/plugin-react`) — not SWC or Babel.
-- All API mutation responses return full `GoalDto` — frontend replaces the goal in local state rather than refetching.
-- `spring.jpa.open-in-view=false` — lazy-loading outside transactions throws; fetch eagerly in service layer or use `@Transactional`.
+- **Plain JS throughout** — no TypeScript in frontend; do not introduce `.ts`/`.tsx` without asking
+- `dev-dist/` is a Vite PWA dev artifact — gitignored at `frontend/.gitignore` but **not** in root `.gitignore`
+- Lombok is used in backend; IDE needs Lombok plugin
+- `@Builder`, `@Data`, `@AllArgsConstructor` on DTOs/entities
+- Backend has a root `.gitignore`? No — only `frontend/.gitignore` exists
+- `./backend/data/` contains the H2 dev database file — it's committed (not gitignored)
