@@ -1,0 +1,3122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Milestone App — Material Design 3 Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+<style>
+  :root, .device-frame {
+    --bg: #1c1b1f;
+    --surface: #2b2930;
+    --surface-alt: #3e3a46;
+    --surface-hover: #332f38;
+    --surface-high: #4a4458;
+    --primary: #d0bcff;
+    --on-primary: #381e72;
+    --primary-container: #4f378b;
+    --text-primary: #e6e1e5;
+    --text-secondary: #cac4d0;
+    --text-tertiary: #938f99;
+    --text-muted: #49454f;
+    --border: #2b2930;
+    --nav-bg: #1c1b1f;
+    --card-bg: #2b2930;
+    --input-bg: #3e3a46;
+    --hero-gradient: linear-gradient(135deg, #d0bcff, #b3a0e5);
+  }
+
+  .device-frame.theme-charcoal {
+    --bg: #151318; --surface: #232126; --surface-alt: #333036;
+    --surface-hover: #2a282e; --surface-high: #424046;
+    --input-bg: #333036; --card-bg: #232126;
+    --border: #232126; --nav-bg: #151318;
+    --hero-gradient: linear-gradient(135deg, #c5b0f5, #a898e0);
+  }
+
+  .device-frame.theme-obsidian {
+    --bg: #0e0d12; --surface: #1a191e; --surface-alt: #2a282e;
+    --surface-hover: #222126; --surface-high: #3a383e;
+    --input-bg: #2a282e; --card-bg: #1a191e;
+    --border: #1a191e; --nav-bg: #0e0d12;
+    --primary: #ccb9f0; --primary-container: #4a2d7a;
+    --hero-gradient: linear-gradient(135deg, #ccb9f0, #ae96d8);
+  }
+
+  .device-frame.theme-deep-navy {
+    --bg: #111422; --surface: #1e2132; --surface-alt: #2d3044;
+    --surface-hover: #252839; --surface-high: #3d4057;
+    --input-bg: #2d3044; --card-bg: #1e2132;
+    --border: #1e2132; --nav-bg: #111422;
+    --primary: #b8c4ff; --on-primary: #1a2260;
+    --primary-container: #39407d;
+    --hero-gradient: linear-gradient(135deg, #b8c4ff, #9aabe8);
+  }
+
+  .device-frame.theme-slate {
+    --bg: #17191d; --surface: #24262b; --surface-alt: #33353b;
+    --surface-hover: #2c2e33; --surface-high: #44464d;
+    --input-bg: #33353b; --card-bg: #24262b;
+    --border: #24262b; --nav-bg: #17191d;
+    --primary: #c4cbd5; --on-primary: #2c313e;
+    --primary-container: #3d434f;
+    --hero-gradient: linear-gradient(135deg, #c4cbd5, #b0b7c2);
+  }
+
+  .device-frame.theme-cream {
+    --bg: #fffbf5; --surface: #f5efe6; --surface-alt: #ece3d6;
+    --surface-hover: #ede5da; --surface-high: #ddd3c4;
+    --input-bg: #e6decf; --card-bg: #f5efe6;
+    --border: #e6decf; --nav-bg: #fffbf5;
+    --primary: #7c5fa0; --on-primary: #ffffff;
+    --primary-container: #eaddff;
+    --text-primary: #1c1b1f; --text-secondary: #625b71;
+    --text-tertiary: #938f99; --text-muted: #cac4d0;
+    --hero-gradient: linear-gradient(135deg, #7c5fa0, #9a7fc0);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    font-family: 'Google Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  h1 {
+    color: var(--text-primary);
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    letter-spacing: -0.2px;
+  }
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+
+  .device-frame {
+    width: 375px;
+    height: 780px;
+    background: var(--bg);
+    border-radius: 40px;
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--primary) 8%, transparent),
+      0 20px 60px rgba(0, 0, 0, 0.8);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 28px 6px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 400;
+    flex-shrink: 0;
+  }
+
+  /* Screen container — fills space between status bar and bottom nav */
+  .screen-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .screen {
+    position: absolute;
+    inset: 0;
+    padding: 8px 16px 0;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .screen.active { display: flex; }
+
+  /* ---------- splash ---------- */
+  .splash-full {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  .splash-logo {
+    width: 72px; height: 72px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--primary), #b3a0e5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  .splash-logo svg { width: 44px; height: 44px; }
+  .splash-logo path { stroke: var(--on-primary); }
+  .splash-logo circle { fill: var(--on-primary); }
+  .splash-title {
+    font-size: 26px; font-weight: 500; color: var(--text-primary); letter-spacing: -0.3px;
+  }
+  .splash-sub { color: var(--text-secondary); font-size: 13px; }
+  .splash-dot {
+    width: 6px; height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: m3pulse 1.2s ease-in-out infinite;
+    margin-top: 16px;
+  }
+  @keyframes m3pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  /* ---------- auth overlay ---------- */
+  .auth-overlay {
+    position: absolute; left: 0; right: 0; top: 44px; bottom: 0;
+    background: var(--bg);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 20;
+    padding: 100px 40px 48px;
+  }
+  .auth-overlay.active { display: flex; }
+  .auth-overlay.active ~ .bottom-nav { display: none; }
+  .auth-logo {
+    width: 72px; height: 72px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--primary), #b3a0e5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+  }
+  .auth-logo svg { width: 44px; height: 44px; }
+  .auth-logo path { stroke: var(--on-primary); }
+  .auth-logo circle { fill: var(--on-primary); }
+  .auth-title {
+    font-size: 26px; font-weight: 500; color: var(--text-primary); letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+  .auth-sub { color: var(--text-secondary); font-size: 13px; }
+  .auth-top { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .auth-btn-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 280px;
+  }
+  .btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 20px;
+    background: var(--text-primary);
+    border: none;
+    border-radius: 24px;
+    color: #1c1b1f;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .btn-google:hover { background: white; }
+  .btn-guest {
+    width: 100%;
+    padding: 14px 20px;
+    background: transparent;
+    border: 1px solid var(--text-muted);
+    border-radius: 24px;
+    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  .btn-guest:hover { border-color: var(--text-secondary); }
+
+  /* ---------- achievements ---------- */
+  .achievements-screen {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    justify-content: flex-end;
+    z-index: 15;
+  }
+  .achievements-screen.active { display: flex; }
+  .achievements-sheet {
+    background: var(--surface);
+    border-radius: 28px 28px 0 0;
+    padding: 16px 20px 32px;
+    max-height: 82%;
+    overflow-y: auto;
+  }
+  .achievements-sheet::-webkit-scrollbar { width: 3px; }
+  .achievements-sheet::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 99px; }
+  .achievements-sheet::-webkit-scrollbar-track { background: transparent; }
+  .achievements-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; padding: 0 4px;
+  }
+  .achievements-header .modal-title { margin-bottom: 0; }
+  .achievements-close {
+    background: none; border: none; color: var(--text-secondary); cursor: pointer;
+    font-family: 'Material Symbols Outlined'; font-size: 24px; padding: 4px;
+    border-radius: 50%; width: 36px; height: 36px; display: flex;
+    align-items: center; justify-content: center;
+  }
+  .achievements-close:hover { background: rgba(255,255,255,0.06); }
+  .ach-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ach-card {
+    background: var(--surface-alt); border-radius: 16px; padding: 16px 12px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    text-align: center; transition: transform 0.15s;
+  }
+  .ach-card.earned { background: var(--primary-container); }
+  .ach-card.locked { opacity: 0.5; }
+  .ach-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Material Symbols Outlined'; font-size: 24px;
+    font-variation-settings: 'FILL' 1;
+  }
+  .ach-card.earned .ach-icon { background: var(--primary); color: var(--on-primary); }
+  .ach-card.locked .ach-icon { background: var(--text-muted); color: var(--text-tertiary); }
+  .ach-name { font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.3; }
+  .ach-card.locked .ach-name { color: var(--text-tertiary); }
+  .ach-desc { font-size: 10px; color: var(--text-secondary); line-height: 1.4; }
+  .ach-status { font-size: 10px; font-weight: 500; letter-spacing: 0.3px; text-transform: uppercase; }
+  .ach-card.earned .ach-status { color: #81c995; }
+  .ach-card.locked .ach-status { color: var(--text-tertiary); }
+  .ach-count {
+    text-align: center; font-size: 12px; color: var(--text-secondary);
+    margin-bottom: 16px; padding: 0 4px;
+  }
+  .ach-count span { color: var(--primary); font-weight: 500; }
+
+  /* ---------- confirm dialog ---------- */
+  .confirm-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 25;
+  }
+  .confirm-overlay.active { display: flex; }
+  .confirm-dialog {
+    background: var(--surface);
+    border-radius: 28px;
+    padding: 24px 24px 16px;
+    width: 280px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .confirm-title { font-size: 18px; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; }
+  .confirm-body { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 20px; }
+  .confirm-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .confirm-actions .btn-secondary { flex: 0; padding: 10px 20px; }
+  .btn-danger {
+    padding: 10px 20px; background: transparent; border: none;
+    border-radius: 20px; color: #f28b82; font-size: 14px; font-weight: 500;
+    cursor: pointer; font-family: inherit; letter-spacing: 0.2px;
+  }
+  .btn-danger:hover { background: rgba(242,139,130,0.1); }
+
+  /* ---------- theme picker ---------- */
+  .theme-screen {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    justify-content: flex-end;
+    z-index: 15;
+  }
+  .theme-screen.active { display: flex; }
+  .theme-sheet {
+    background: var(--surface);
+    border-radius: 28px 28px 0 0;
+    padding: 16px 20px 28px;
+  }
+  .theme-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 4px; }
+  .theme-option {
+    background: var(--surface-alt); border-radius: 16px; padding: 16px 8px 12px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    cursor: pointer; border: 2px solid transparent; transition: all 0.15s;
+  }
+  .theme-option:hover { border-color: var(--primary); }
+  .theme-option.active { border-color: var(--primary); background: var(--primary-container); }
+  .theme-swatches { display: flex; gap: 5px; align-items: center; justify-content: center; padding: 2px 0; }
+  .theme-swatch {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+  .theme-swatch.bg-swatch { width: 28px; height: 28px; }
+  .theme-label { font-size: 12px; font-weight: 500; color: var(--text-primary); text-align: center; }
+
+  /* ---------- goal list ---------- */
+  .goal-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding: 4px 0;
+    flex-shrink: 0;
+  }
+  .brand-compact {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-compact .logo-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary), #b3a0e5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .brand-compact .logo-icon svg { width: 22px; height: 22px; }
+  .brand-compact .logo-icon path { stroke: var(--on-primary); }
+  .brand-compact .logo-icon circle { fill: var(--on-primary); }
+  .brand-compact .brand-n {
+    font-size: 18px; font-weight: 500; color: var(--text-primary);
+  }
+
+  .goal-list-scroll { flex: 1; overflow-y: auto; min-height: 0; }
+  .goal-list-scroll::-webkit-scrollbar { width: 3px; }
+  .goal-list-scroll::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 99px; }
+  .goal-list-scroll::-webkit-scrollbar-track { background: transparent; }
+
+  .goal-card {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .goal-card:hover { background: var(--surface-hover); }
+  .gc-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .gc-title { flex: 1; font-size: 15px; font-weight: 500; color: var(--text-primary); }
+  .gc-diff {
+    font-size: 10px; font-weight: 500; padding: 3px 10px; border-radius: 8px;
+    text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .diff-easy { background: #e8f5e9; color: #1b5e20; }
+  .diff-medium { background: #fff3e0; color: #e65100; }
+  .diff-hard { background: #fce4ec; color: #c62828; }
+  .diff-epic { background: #f3e5f5; color: #6a1b9a; }
+  .gc-bar { height: 4px; background: var(--surface-high); border-radius: 99px; overflow: hidden; }
+  .gc-bar-fill { height: 100%; border-radius: 99px; background: var(--primary); transition: width 0.5s ease; }
+  .gc-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--text-secondary); }
+
+  /* ---------- journey detail ---------- */
+  .journey-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .jd-menu-btn {
+    background: none; border: none; color: var(--text-secondary); cursor: pointer;
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Material Symbols Outlined'; font-size: 22px;
+    flex-shrink: 0;
+  }
+  .jd-menu-btn:hover { background: rgba(255,255,255,0.06); }
+  .jd-dropdown {
+    position: absolute; top: 100%; right: 4px; z-index: 10;
+    background: var(--surface); border-radius: 12px; padding: 4px 0;
+    min-width: 140px; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    display: none; overflow: hidden;
+  }
+  .jd-dropdown.active { display: block; }
+  .jd-dropdown-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; font-size: 13px; color: var(--text-primary); cursor: pointer;
+    font-family: inherit;
+  }
+  .jd-dropdown-item:hover { background: var(--surface-hover); }
+  .jd-dropdown-item .mat-icon { font-size: 18px; color: var(--text-secondary); }
+  .jd-dropdown-item.danger { color: #f28b82; }
+  .jd-dropdown-item.danger .mat-icon { color: #f28b82; }
+  .back-btn {
+    background: none; border: none; color: var(--text-secondary);
+    width: 40px; height: 40px; border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.06); }
+  .back-btn .mat-icon { font-size: 24px; }
+  .jd-title { flex: 1; font-size: 18px; font-weight: 500; color: var(--text-primary); }
+  .jd-why {
+    font-size: 13px; color: var(--text-secondary); font-style: italic;
+    margin-bottom: 10px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--surface);
+    flex-shrink: 0;
+  }
+  .jd-stats { display: flex; gap: 8px; margin-bottom: 12px; flex-shrink: 0; }
+  .jd-stat { flex: 1; background: var(--surface); border-radius: 12px; padding: 12px 8px; text-align: center; }
+  .jd-stat-val { font-size: 22px; font-weight: 500; color: var(--primary); }
+  .jd-stat-lbl { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  .jd-stat.wide { flex: 1.5; }
+
+  .journey-wrap {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 8px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .journey-wrap svg { width: 100%; height: auto; max-height: 400px; display: block; }
+
+  /* ---------- roadmap ---------- */
+  .roadmap-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+    flex-shrink: 0;
+  }
+  .rh-title { font-size: 18px; font-weight: 500; color: var(--text-primary); }
+  .ms-list-scroll { flex: 1; overflow-y: auto; min-height: 0; }
+  .ms-list-scroll::-webkit-scrollbar { width: 3px; }
+  .ms-list-scroll::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 99px; }
+  .ms-list-scroll::-webkit-scrollbar-track { background: transparent; }
+
+  .ms-card {
+    background: var(--surface); border-radius: 16px; margin-bottom: 10px;
+    overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .ms-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px; cursor: pointer;
+    min-height: 56px;
+  }
+  .ms-status {
+    width: 28px; height: 28px; border-radius: 50%;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 500; font-family: 'Material Symbols Outlined';
+  }
+  .ms-status.todo { background: var(--surface-high); color: var(--text-secondary); }
+  .ms-status.active { background: var(--primary); color: var(--on-primary); }
+  .ms-status.done { background: #81c995; color: #1b3b2b; }
+  .ms-info { flex: 1; }
+  .ms-title { font-size: 15px; font-weight: 500; color: var(--text-primary); }
+  .ms-meta { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+  .ms-chevron { color: var(--text-secondary); font-size: 18px; transition: transform 0.2s; font-family: 'Material Symbols Outlined'; }
+  .ms-chevron.open { transform: rotate(180deg); }
+  .ms-body { border-top: 1px solid var(--surface-alt); padding: 4px 16px 12px; display: none; }
+
+  .task-row {
+    display: flex; align-items: center; gap: 12px; padding: 7px 0;
+  }
+  .task-check {
+    width: 20px; height: 20px; border-radius: 4px;
+    border: 2px solid var(--text-tertiary); flex-shrink: 0; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--on-primary); transition: all 0.15s;
+    font-family: 'Material Symbols Outlined'; font-variation-settings: 'FILL' 1;
+  }
+  .task-check.done { background: var(--primary); border-color: var(--primary); }
+  .task-check:not(.done):hover { border-color: var(--primary); }
+  .task-title { flex: 1; font-size: 13px; color: var(--text-primary); font-weight: 400; cursor: text; }
+  .task-title.done { text-decoration: line-through; color: var(--text-tertiary); }
+  .task-title:focus { outline: none; background: var(--surface-alt); border-radius: 4px; padding: 0 4px; }
+  .task-del {
+    background: none; border: none; color: var(--text-tertiary); cursor: pointer;
+    font-family: 'Material Symbols Outlined'; font-size: 18px; opacity: 0;
+    transition: opacity 0.15s; flex-shrink: 0; width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center; border-radius: 50%;
+  }
+  .task-row:hover .task-del { opacity: 1; }
+  .task-del:hover { color: #f28b82; background: rgba(242,139,130,0.1); }
+
+  .add-task-row {
+    display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px;
+    border-top: 1px solid var(--surface-alt);
+  }
+  .add-task-input {
+    flex: 1; background: var(--surface-alt); border: none;
+    border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--text-primary); outline: none;
+    font-family: inherit;
+  }
+  .add-task-input:focus { background: var(--text-muted); }
+  .add-task-input::placeholder { color: var(--text-tertiary); }
+
+  .add-ms-btn {
+    width: 100%; padding: 14px; background: none; border: 1px dashed var(--text-tertiary);
+    border-radius: 12px; color: var(--text-secondary); font-size: 13px; cursor: pointer;
+    transition: all 0.15s; font-family: inherit; margin-top: 4px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .add-ms-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .weight-selector { display: flex; gap: 6px; }
+  .weight-btn {
+    flex: 1; padding: 10px 0; border: 1px solid var(--surface-alt); border-radius: 8px;
+    background: transparent; color: var(--text-tertiary); font-size: 14px; cursor: pointer;
+    font-family: inherit; transition: all 0.15s; text-align: center;
+  }
+  .weight-btn.active { border-color: var(--primary); background: var(--primary-container); color: #eaddff; }
+  .weight-btn:hover { border-color: var(--text-tertiary); }
+
+  /* ---------- momentum ---------- */
+  .mom-header { flex-shrink: 0; margin-bottom: 16px; }
+  .mh-title { font-size: 18px; font-weight: 500; color: var(--text-primary); }
+  .mom-list-scroll { flex: 1; overflow-y: auto; min-height: 0; }
+  .mom-list-scroll::-webkit-scrollbar { width: 3px; }
+  .mom-list-scroll::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 99px; }
+  .mom-list-scroll::-webkit-scrollbar-track { background: transparent; }
+
+  .momentum-card {
+    background: var(--surface); border-radius: 12px; padding: 16px; margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .mc-row { display: flex; align-items: center; gap: 16px; }
+  .mc-icon { font-size: 28px; color: var(--primary); font-family: 'Material Symbols Outlined'; font-variation-settings: 'FILL' 1; }
+  .mc-info { flex: 1; }
+  .mc-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+  .mc-value { font-size: 20px; font-weight: 500; color: var(--primary); margin-top: 2px; }
+  .mc-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+  .event-item {
+    display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--surface);
+  }
+  .event-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); margin-top: 5px; flex-shrink: 0; }
+  .event-text { font-size: 13px; color: var(--text-primary); }
+  .event-time { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+  /* ---------- Navigation Bar ---------- */
+  .bottom-nav {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    background: var(--bg);
+    border-top: 1px solid var(--surface);
+    height: 72px;
+    flex-shrink: 0;
+    padding-top: 0;
+  }
+  .bottom-nav.no-labels { height: 52px; }
+  .bottom-nav.no-labels .nav-item .nav-label { display: none; }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px 0 4px;
+    transition: all 0.15s;
+    font-family: inherit;
+    max-width: 80px;
+  }
+  .nav-item .nav-icon-wrap {
+    width: 48px;
+    height: 32px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .nav-item.active .nav-icon-wrap { background: var(--primary-container); }
+  .nav-item .mat-icon {
+    font-size: 24px;
+    transition: all 0.2s;
+    font-variation-settings: 'FILL' 0, 'wght' 300;
+  }
+  .nav-item.active .mat-icon { color: var(--primary); font-variation-settings: 'FILL' 1, 'wght' 400; }
+  .nav-item .nav-label { font-size: 10px; letter-spacing: 0.2px; font-weight: 500; color: var(--text-secondary); transition: color 0.2s; }
+  .nav-item.active .nav-label { color: var(--primary); }
+
+  /* ---------- goal form (bottom sheet) ---------- */
+  .form-screen {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    flex-direction: column;
+    justify-content: flex-end;
+    z-index: 10;
+  }
+  .form-screen.active { display: flex; }
+  .modal-sheet {
+    background: var(--surface);
+    border-radius: 28px 28px 0 0;
+    padding: 16px 24px 32px;
+  }
+  .modal-handle {
+    width: 32px; height: 4px;
+    background: var(--text-muted);
+    border-radius: 99px; margin: 0 auto 16px;
+  }
+  .modal-title { font-size: 18px; font-weight: 500; color: var(--text-primary); margin-bottom: 16px; }
+  .form-group { margin-bottom: 14px; }
+  .form-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
+  .form-input {
+    width: 100%; background: var(--surface-alt); border: none;
+    border-radius: 8px; padding: 14px; font-size: 14px; color: var(--text-primary); outline: none;
+    font-family: inherit;
+  }
+  .form-input:focus { background: var(--text-muted); }
+  .form-textarea { min-height: 80px; resize: none; }
+  .goal-icon-picker {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .goal-icon-opt {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--surface-alt); border: 1px solid transparent;
+    color: var(--text-secondary); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; transition: all 0.12s;
+  }
+  .goal-icon-opt:hover { border-color: var(--primary); background: rgba(208,188,255,0.08); }
+  .goal-icon-opt.active { background: var(--primary-container); color: var(--on-primary-container); border-color: var(--primary); }
+  .form-row { display: flex; gap: 12px; }
+  .form-row .form-group { flex: 1; }
+  .form-select {
+    width: 100%; background: var(--surface-alt); border: none;
+    border-radius: 8px; padding: 14px; font-size: 14px; color: var(--text-primary); outline: none;
+    font-family: inherit; cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath fill='%23cac4d0' d='M7 10L2 5h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+  }
+  .form-btn-row { display: flex; gap: 10px; margin-top: 24px; }
+  .btn-primary {
+    flex: 1; padding: 14px; background: var(--primary); border: none; border-radius: 20px;
+    color: var(--on-primary); font-size: 14px; font-weight: 500; cursor: pointer;
+    font-family: inherit; letter-spacing: 0.2px;
+  }
+  .btn-secondary {
+    flex: 1; padding: 14px; background: transparent; border: none;
+    border-radius: 20px; color: var(--text-secondary); font-size: 14px; font-weight: 500; cursor: pointer;
+    font-family: inherit; letter-spacing: 0.2px;
+  }
+
+  /* ---------- profile ---------- */
+  .profile-scroll { flex: 1; overflow-y: auto; min-height: 0; }
+  .profile-scroll::-webkit-scrollbar { width: 3px; }
+  .profile-scroll::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 99px; }
+  .profile-scroll::-webkit-scrollbar-track { background: transparent; }
+
+  .profile-header {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 20px 0 16px; gap: 6px; flex-shrink: 0;
+  }
+  .profile-avatar-wrap {
+    position: relative; cursor: pointer;
+  }
+  .profile-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--primary-container); display: flex; align-items: center; justify-content: center;
+    color: #eaddff; font-size: 36px; font-weight: 500;
+    transition: filter 0.2s;
+  }
+  .profile-avatar-wrap:hover .profile-avatar { filter: brightness(0.7); }
+  .avatar-edit-badge {
+    position: absolute; bottom: 0; right: -2px;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--primary); border: 2.5px solid #1c1b1f;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Material Symbols Outlined'; font-size: 16px; color: var(--on-primary);
+    font-variation-settings: 'FILL' 1;
+  }
+  .profile-name-row {
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; padding: 2px 8px; border-radius: 8px;
+  }
+  .profile-name-row:hover { background: rgba(255,255,255,0.06); }
+  .profile-name { font-size: 18px; font-weight: 500; color: var(--text-primary); }
+  .profile-name-edit {
+    font-family: 'Material Symbols Outlined'; font-size: 16px; color: var(--text-tertiary);
+    font-variation-settings: 'FILL' 0;
+  }
+  .profile-email { font-size: 13px; color: var(--text-secondary); }
+
+  .settings-item {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 12px; border-bottom: 1px solid var(--surface); cursor: pointer;
+  }
+  .settings-item:hover { background: rgba(255,255,255,0.03); }
+  .settings-item .mat-icon { font-size: 22px; color: var(--text-secondary); }
+  .settings-item .si-label { flex: 1; font-size: 14px; color: var(--text-primary); font-weight: 400; }
+  .settings-item .si-value { color: var(--text-secondary); font-size: 13px; }
+  .settings-item .si-arrow { font-size: 18px; color: var(--text-muted); font-family: 'Material Symbols Outlined'; }
+  .settings-toggle {
+    width: 44px; height: 24px; border-radius: 12px; background: var(--surface-high); border: none;
+    cursor: pointer; position: relative; transition: background 0.2s;
+  }
+  .settings-toggle.on { background: var(--primary); }
+  .settings-toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 20px; height: 20px; border-radius: 50%; background: white;
+    transition: transform 0.2s;
+  }
+  .settings-toggle.on::after { transform: translateX(20px); }
+
+  .fab {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: var(--primary);
+    border: none;
+    color: var(--on-primary);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 6px 16px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Material Symbols Outlined';
+    font-size: 28px;
+    z-index: 5;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .fab:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.4); transform: translateY(-1px); }
+  .fab:active { transform: scale(0.96); }
+  .sched-fab-container.open .fab { transform: rotate(45deg); }
+
+  .sched-fab-container {
+    position: absolute; bottom: 16px; right: 16px; z-index: 5;
+    width: 56px; height: 56px;
+  }
+  .sched-fab-container .fab {
+    position: absolute; bottom: 0; left: 0; right: auto;
+  }
+  .sched-fab-mini {
+    position: absolute; bottom: 0; left: 6px;
+    width: 44px; height: 44px; border-radius: 14px;
+    background: var(--surface-alt); border: none;
+    color: var(--text-primary); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Material Symbols Outlined'; font-size: 22px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25); z-index: 1;
+    transition: opacity 0.2s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0; transform: scale(0); pointer-events: none;
+  }
+  .sched-fab-mini:nth-child(1) { transition-delay: 0.02s; }
+  .sched-fab-mini:nth-child(2) { transition-delay: 0.06s; }
+  .sched-fab-mini:nth-child(3) { transition-delay: 0.10s; }
+  .sched-fab-container.open .sched-fab-mini:nth-child(1) { bottom: 66px; opacity: 1; transform: scale(1); pointer-events: auto; }
+  .sched-fab-container.open .sched-fab-mini:nth-child(2) { bottom: 118px; opacity: 1; transform: scale(1); pointer-events: auto; }
+  .sched-fab-container.open .sched-fab-mini:nth-child(3) { bottom: 170px; opacity: 1; transform: scale(1); pointer-events: auto; }
+  .sched-fab-container.open .sched-fab-mini:hover {
+    background: var(--surface-hover);
+  }
+
+  .sched-search-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    background: var(--surface); border-radius: 10px; cursor: pointer;
+    transition: background 0.12s;
+  }
+  .sched-search-item:hover { background: var(--surface-hover); }
+  .sched-search-info { flex: 1; min-width: 0; }
+  .sched-search-title { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+  .sched-search-meta { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+  .mat-icon { font-family: 'Material Symbols Outlined'; font-size: 24px; line-height: 1; }
+
+  /* ---------- light mode overrides ---------- */
+  .device-frame.light-mode { background: var(--bg); }
+  .device-frame.light-mode .screen { background: var(--bg); }
+  .device-frame.light-mode .auth-overlay { background: var(--bg); }
+  .device-frame.light-mode .goal-list-header .brand-n { color: var(--text-primary); }
+  .device-frame.light-mode .goal-card { background: var(--surface); }
+  .device-frame.light-mode .goal-card:hover { background: var(--surface-hover); }
+  .device-frame.light-mode .gc-title { color: var(--text-primary); }
+  .device-frame.light-mode .gc-meta { color: var(--text-secondary); }
+  .device-frame.light-mode .gc-bar { background: var(--surface-high); }
+  .device-frame.light-mode .bottom-nav { background: var(--nav-bg); border-top-color: var(--border); }
+  .device-frame.light-mode .nav-item { color: var(--text-secondary); }
+  .device-frame.light-mode .nav-item.active .nav-icon-wrap { background: var(--primary-container); }
+  .device-frame.light-mode .nav-item.active .mat-icon { color: var(--primary); }
+  .device-frame.light-mode .nav-item.active .nav-label { color: var(--primary); }
+  .device-frame.light-mode .nav-item .nav-label { color: var(--text-secondary); }
+  .device-frame.light-mode .profile-avatar { background: var(--primary); color: var(--on-primary); }
+  .device-frame.light-mode .profile-name { color: var(--text-primary); }
+  .device-frame.light-mode .profile-email { color: var(--text-secondary); }
+  .device-frame.light-mode .profile-scroll { background: var(--bg); }
+  .device-frame.light-mode .settings-item { border-bottom-color: var(--border); }
+  .device-frame.light-mode .settings-item:hover { background: rgba(0,0,0,0.03); }
+  .device-frame.light-mode .settings-item .si-label { color: var(--text-primary); }
+  .device-frame.light-mode .settings-item .mat-icon { color: var(--text-secondary); }
+  .device-frame.light-mode .settings-item .si-value { color: var(--text-secondary); }
+  .device-frame.light-mode .settings-toggle { background: var(--surface-high); }
+  .device-frame.light-mode .settings-toggle.on { background: var(--primary); }
+  .device-frame.light-mode .roadmap-header span { color: var(--text-primary); }
+  .device-frame.light-mode .ms-card { background: var(--surface); }
+  .device-frame.light-mode .ms-title { color: var(--text-primary); }
+  .device-frame.light-mode .ms-meta { color: var(--text-secondary); }
+  .device-frame.light-mode .mom-header span { color: var(--text-primary); }
+  .device-frame.light-mode .momentum-card { background: var(--surface); }
+  .device-frame.light-mode .momentum-card .mc-label { color: var(--text-secondary); }
+  .device-frame.light-mode .momentum-card .mc-sub { color: var(--text-secondary); }
+  .device-frame.light-mode .jd-title { color: var(--text-primary); }
+  .device-frame.light-mode .jd-stat { background: var(--surface); }
+  .device-frame.light-mode .jd-why { color: var(--text-secondary); border-bottom-color: var(--border); }
+  .device-frame.light-mode .journey-wrap { background: var(--surface); }
+  .device-frame.light-mode .modal-sheet { background: var(--surface); }
+  .device-frame.light-mode .modal-title { color: var(--text-primary); }
+  .device-frame.light-mode .form-input { background: var(--input-bg); color: var(--text-primary); }
+  .device-frame.light-mode .form-input:focus { background: var(--surface-high); }
+  .device-frame.light-mode .form-label { color: var(--text-secondary); }
+  .device-frame.light-mode .achievements-sheet { background: var(--surface); }
+  .device-frame.light-mode .ach-card.earned { background: var(--primary-container); }
+  .device-frame.light-mode .ach-card.earned .ach-name { color: var(--text-primary); }
+  .device-frame.light-mode .ach-card.locked { background: var(--surface-alt); }
+  .device-frame.light-mode .ach-card.locked .ach-icon { background: var(--surface-high); color: var(--text-secondary); }
+  .device-frame.light-mode .ach-count span { color: var(--primary); }
+  .device-frame.light-mode .ach-card.earned .ach-icon { background: var(--primary); color: var(--on-primary); }
+  .device-frame.light-mode .ach-card.earned .ach-status { color: #4a7c59; }
+  .device-frame.light-mode .ach-count { color: var(--text-secondary); }
+  .device-frame.light-mode .event-text { color: var(--text-primary); }
+  .device-frame.light-mode .event-time { color: var(--text-secondary); }
+  .device-frame.light-mode .event-item { border-bottom-color: var(--border); }
+  .device-frame.light-mode .add-ms-btn { color: var(--primary); border-color: var(--surface-high); }
+  .device-frame.light-mode .task-title { color: var(--text-primary); }
+  .device-frame.light-mode .add-task-input { color: var(--text-primary); }
+  .device-frame.light-mode .add-task-input::placeholder { color: var(--text-secondary); }
+
+  /* ---------- schedule ---------- */
+  .sched-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px; flex-shrink: 0;
+  }
+  .sched-header .brand-n { font-size: 18px; font-weight: 500; color: var(--text-primary); }
+
+  .sched-filter-row {
+    display: flex; gap: 5px; flex-shrink: 0; margin-bottom: 8px;
+  }
+  .sched-filter-chip {
+    flex: 1; padding: 6px 4px; border-radius: 8px; text-align: center;
+    background: var(--surface); border: 1px solid transparent; color: var(--text-secondary);
+    font-size: 11px; font-weight: 500; cursor: pointer; font-family: inherit;
+    transition: all 0.15s; min-width: 0;
+  }
+  .sched-filter-chip:hover { background: var(--surface-hover); border-color: var(--surface-alt); }
+  .sched-filter-chip.active { background: var(--primary-container); color: #eaddff; border-color: var(--primary); font-weight: 600; }
+
+  .sched-scroll { flex: 1; overflow-y: auto; min-height: 0; }
+  .sched-scroll::-webkit-scrollbar { width: 3px; }
+  .sched-scroll::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 99px; }
+  .sched-scroll::-webkit-scrollbar-track { background: transparent; }
+
+  .sched-card {
+    background: var(--surface); border-radius: 16px; padding: 14px 16px;
+    margin-bottom: 10px; cursor: pointer; transition: all 0.15s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .sched-card:hover { background: var(--surface-hover); }
+  .sched-card-top { display: flex; align-items: flex-start; gap: 12px; }
+  .sched-card-info { flex: 1; min-width: 0; }
+  .sched-card-title { font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; }
+  .sched-card-meta { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+
+  .sched-freq-badge {
+    font-size: 10px; font-weight: 600; padding: 3px 10px 3px 8px; border-radius: 6px;
+    text-transform: uppercase; letter-spacing: 0.4px; display: inline-flex; align-items: center; gap: 4px;
+    font-family: inherit;
+  }
+  .sched-freq-badge::before { font-family: 'Material Symbols Outlined'; font-size: 12px; }
+
+  .sched-freq-daily { background: #e8f5e9; color: #1b5e20; }
+  .sched-freq-daily::before { content: "today"; }
+  .sched-freq-weekly { background: #fff3e0; color: #e65100; }
+  .sched-freq-weekly::before { content: "date_range"; }
+  .sched-freq-monthly { background: #f3e5f5; color: #6a1b9a; }
+  .sched-freq-monthly::before { content: "calendar_month"; }
+  .sched-freq-yearly { background: #fce4ec; color: #c62828; }
+  .sched-freq-yearly::before { content: "event"; }
+  .sched-streak {
+    font-size: 11px; color: var(--primary); font-weight: 500; margin-top: 4px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .sched-streak::before {
+    font-family: 'Material Symbols Outlined'; font-size: 16px;
+    font-variation-settings: 'FILL' 1; content: "local_fire_department"; color: #f97316;
+  }
+  .sched-streak.next-due { color: var(--text-secondary); }
+  .sched-streak.next-due::before {
+    content: "schedule"; color: var(--text-tertiary); font-variation-settings: 'FILL' 0;
+  }
+  .sched-empty {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 12px; color: var(--text-tertiary);
+  }
+  .sched-empty-icon { font-family: 'Material Symbols Outlined'; font-size: 48px; opacity: 0.4; }
+  .sched-empty-text { font-size: 13px; }
+
+  /* schedule form */
+  .sched-freq-picker {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;
+  }
+  .sched-freq-chip {
+    padding: 8px 16px; border-radius: 8px; border: 1px solid var(--surface-alt);
+    background: transparent; color: var(--text-secondary); font-size: 12px;
+    font-weight: 500; cursor: pointer; font-family: inherit; transition: all 0.15s;
+  }
+  .sched-freq-chip:hover { border-color: var(--text-tertiary); }
+  .sched-freq-chip.active { border-color: var(--primary); background: var(--primary-container); color: #eaddff; }
+  .sched-dynamic-section {
+    background: var(--surface-alt); border-radius: 12px; padding: 12px;
+    margin-bottom: 12px;
+  }
+  .sched-dynamic-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .day-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+  .day-chip {
+    padding: 6px 10px; border-radius: 6px; border: 1px solid var(--surface-high);
+    background: transparent; color: var(--text-secondary); font-size: 11px;
+    font-weight: 500; cursor: pointer; font-family: inherit; transition: all 0.15s; min-width: 36px; text-align: center;
+  }
+  .day-chip:hover { border-color: var(--text-tertiary); }
+  .day-chip.active { border-color: var(--primary); background: var(--primary-container); color: #eaddff; }
+  .end-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .end-row .form-select { flex: 1; min-width: 0; }
+  .end-row .form-input[type="number"] { width: 70px; flex: none; padding: 10px; text-align: center; }
+  .end-row .form-input[type="date"] { flex: 1; min-width: 0; padding: 10px; }
+
+  /* schedule detail */
+  .sched-detail-scroll { flex: 1; overflow-y: auto; min-height: 0; }
+  .sched-detail-scroll::-webkit-scrollbar { width: 3px; }
+  .sched-detail-scroll::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 99px; }
+  .sched-detail-scroll::-webkit-scrollbar-track { background: transparent; }
+  .sd-header {
+    display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;
+    padding: 0 4px; flex-shrink: 0;
+  }
+  .sd-title-row {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .sd-title { font-size: 18px; font-weight: 500; color: var(--text-primary); }
+  .sd-meta { font-size: 12px; color: var(--text-secondary); }
+  .sd-stats {
+    display: flex; gap: 8px; margin-bottom: 12px; flex-shrink: 0;
+  }
+  .sd-stat {
+    flex: 1; background: var(--surface); border-radius: 12px; padding: 10px 4px; text-align: center;
+  }
+  .sd-stat-val { font-size: 20px; font-weight: 500; color: var(--primary); }
+  .sd-stat-lbl { font-size: 9px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.3px; margin-top: 2px; }
+
+  .sd-calendar {
+    background: var(--surface); border-radius: 16px; padding: 12px;
+    margin-bottom: 12px; flex-shrink: 0;
+  }
+  .sd-cal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .sd-cal-nav {
+    background: none; border: none; color: var(--text-secondary); cursor: pointer;
+    font-family: 'Material Symbols Outlined'; font-size: 20px; padding: 6px;
+    border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .sd-cal-nav:hover { background: rgba(255,255,255,0.08); }
+  .sd-cal-nav:active { transform: scale(0.9); }
+  .sd-cal-month { font-size: 14px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.2px; }
+  .sd-cal-day-header { font-size: 10px; color: var(--text-tertiary); padding: 4px 0; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .sd-cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center;
+  }
+  .sd-cal-cell {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--text-primary); border-radius: 50%; cursor: pointer;
+    transition: all 0.15s; position: relative; font-weight: 450;
+  }
+  .sd-cal-cell:hover { background: rgba(255,255,255,0.08); }
+  .sd-cal-cell:active { transform: scale(0.92); }
+  .sd-cal-cell.other-month { color: var(--text-muted); font-weight: 400; }
+  .sd-cal-cell.today { font-weight: 700; box-shadow: inset 0 0 0 2px var(--primary); }
+  .sd-cal-cell.done { background: var(--primary); color: var(--on-primary); font-weight: 500; }
+  .sd-cal-cell.pending {
+    background: transparent; border: 1.5px dashed var(--text-tertiary);
+    font-weight: 500; color: var(--text-secondary);
+  }
+  .sd-cal-cell.missed { background: transparent; color: var(--text-tertiary); opacity: 0.45; font-weight: 400; text-decoration: line-through; }
+  .sd-cal-cell.skipped { position: relative; background: var(--surface-alt); }
+  .sd-cal-cell.skipped::after {
+    content: ''; position: absolute; inset: 6px; border-radius: 50%;
+    border: 2px solid var(--text-tertiary); opacity: 0.4;
+  }
+  .sd-cal-cell.future-locked { color: var(--text-primary); cursor: default; opacity: 0.35; font-weight: 400; }
+
+
+  .sd-instance-list { flex-shrink: 0; }
+  .sd-instance-header { font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .sd-instance-item {
+    display: flex; align-items: center; gap: 10px; padding: 8px 4px;
+    border-bottom: 1px solid var(--surface);
+  }
+  .sd-instance-date { flex: 1; font-size: 13px; color: var(--text-primary); }
+  .sd-instance-status { font-size: 11px; font-weight: 500; }
+  .sd-instance-status.done { color: #81c995; }
+  .sd-instance-status.pending { color: var(--text-tertiary); cursor: pointer; font-family: 'Material Symbols Outlined'; font-size: 18px; }
+  .sd-instance-status.missed { color: var(--text-tertiary); opacity: 0.6; font-size: 11px; font-weight: 400; }
+  .sd-instance-item .sched-reason-custom-icon {
+    font-family: 'Material Symbols Outlined'; font-size: 14px; cursor: pointer;
+    color: var(--primary); vertical-align: middle; position: relative;
+  }
+  .sched-reason-tooltip {
+    position: fixed; z-index: 1001; background: var(--surface-alt);
+    color: var(--text-primary); font-size: 12px; padding: 8px 12px;
+    border-radius: 8px; max-width: 200px; word-wrap: break-word;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25); pointer-events: none;
+  }
+
+  .light-mode .sched-filter-chip { background: var(--surface); color: var(--text-secondary); }
+  .light-mode .sched-filter-chip.active { background: var(--primary); color: var(--on-primary); }
+  .light-mode .sched-card { background: var(--surface); }
+  .light-mode .sched-card-title { color: var(--text-primary); }
+  .light-mode .sched-card-meta { color: var(--text-secondary); }
+  .light-mode .sd-stat { background: var(--surface); }
+  .light-mode .sd-calendar { background: var(--surface); }
+  .light-mode .sched-dynamic-section { background: var(--input-bg); }
+  .light-mode .sched-freq-chip.active { color: var(--on-primary); }
+  .light-mode .day-chip.active { color: var(--on-primary); }
+  .light-mode .sched-streak { color: var(--primary); }
+
+  .skip-reason-btn {
+    display: flex; align-items: center; gap: 12px; width: 100%;
+    padding: 14px 12px; background: var(--surface-alt); border: none;
+    border-radius: 12px; color: var(--text-primary); font-size: 14px;
+    cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .skip-reason-btn:hover { background: var(--surface-hover); }
+</style>
+</head>
+<body>
+
+<h1>Milestone</h1>
+<p class="subtitle">Tap bottom nav to navigate</p>
+
+<div class="device-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span style="display:flex;align-items:center;gap:8px;font-size:13px">
+      <span style="display:inline-flex;align-items:flex-end;gap:1.5px;height:12px">
+        <span style="display:block;width:3px;height:5px;background:#cac4d0;border-radius:1px"></span>
+        <span style="display:block;width:3px;height:7px;background:#cac4d0;border-radius:1px"></span>
+        <span style="display:block;width:3px;height:9px;background:#cac4d0;border-radius:1px"></span>
+        <span style="display:block;width:3px;height:12px;background:#cac4d0;border-radius:1px"></span>
+      </span>
+      <span style="position:relative;display:inline-block;width:22px;height:12px;border:1.5px solid #cac4d0;border-radius:2px">
+        <span style="position:absolute;right:-4px;top:2.5px;width:2.5px;height:4px;background:#cac4d0;border-radius:0 1px 1px 0"></span>
+        <span style="position:absolute;left:2px;top:2px;width:12px;height:6px;background:#81c995;border-radius:1px"></span>
+      </span>
+    </span>
+  </div>
+
+  <div class="screen-container">
+    <!-- SPLASH -->
+    <div id="screen-splash" class="screen active">
+      <div class="splash-full">
+        <div class="splash-logo">
+          <svg viewBox="0 0 40 40">
+            <path d="M11 30 C 19 27, 16 18, 22 15 S 27 10, 29 10" fill="none" stroke-width="2.6" stroke-linecap="round" opacity="0.95"/>
+            <circle cx="11" cy="30" r="2.6"/><circle cx="29" cy="10" r="3.6"/>
+          </svg>
+        </div>
+        <div class="splash-title">Milestone</div>
+        <div class="splash-sub">Reach the finish line</div>
+        <div class="splash-dot"></div>
+      </div>
+    </div>
+
+    <!-- JOURNEY -->
+    <div id="screen-journey" class="screen">
+      <div id="journey-list" style="display:flex;flex-direction:column;flex:1;min-height:0;position:relative">
+        <div class="goal-list-header">
+          <div class="brand-compact">
+            <div class="logo-icon">
+              <svg viewBox="0 0 40 40">
+                <path d="M11 30 C 19 27, 16 18, 22 15 S 27 10, 29 10" fill="none" stroke-width="2.6" stroke-linecap="round" opacity="0.95"/>
+                <circle cx="11" cy="30" r="2.6"/><circle cx="29" cy="10" r="3.6"/>
+              </svg>
+            </div>
+            <span class="brand-n">Milestone</span>
+          </div>
+        </div>
+        <div class="goal-list-scroll">
+          <div class="goal-card" data-goal-id="flutter" onclick="showJourneyDetail(this)">
+            <div class="gc-top">
+              <span class="gc-title">Learn Flutter & Dart</span>
+              <span class="gc-diff diff-hard">Hard</span>
+            </div>
+            <div class="gc-bar"><div class="gc-bar-fill" style="width:67%"></div></div>
+            <div class="gc-meta"><span>67% complete</span><span>12 days left</span></div>
+          </div>
+          <div class="goal-card" data-goal-id="books" onclick="showJourneyDetail(this)">
+            <div class="gc-top">
+              <span class="gc-title">Read 12 Books This Year</span>
+              <span class="gc-diff diff-medium">Medium</span>
+            </div>
+            <div class="gc-bar"><div class="gc-bar-fill" style="width:33%"></div></div>
+            <div class="gc-meta"><span>33% complete</span><span>—</span></div>
+          </div>
+          <div class="goal-card" data-goal-id="marathon" onclick="showJourneyDetail(this)">
+            <div class="gc-top">
+              <span class="gc-title">Run a Half Marathon</span>
+              <span class="gc-diff diff-epic">Epic</span>
+            </div>
+            <div class="gc-bar"><div class="gc-bar-fill" style="width:15%"></div></div>
+            <div class="gc-meta"><span>15% complete</span><span>84 days left</span></div>
+          </div>
+          <div class="goal-card" data-goal-id="routine" onclick="showJourneyDetail(this)">
+            <div class="gc-top">
+              <span class="gc-title">Morning Routine</span>
+              <span class="gc-diff diff-easy">Easy</span>
+            </div>
+            <div class="gc-bar"><div class="gc-bar-fill" style="width:92%"></div></div>
+            <div class="gc-meta"><span>92% complete</span><span>3 days left</span></div>
+          </div>
+          <div class="sched-fab-container">
+            <button class="sched-fab-mini" id="goal-fab-add" onclick="openForm()">add</button>
+            <button class="sched-fab-mini" id="goal-fab-search" onclick="openGoalSearch()">search</button>
+            <button class="fab" onclick="toggleGoalFab()">add</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="journey-detail" style="display:none;flex-direction:column;flex:1;min-height:0">
+        <div class="journey-detail-header">
+          <button class="back-btn" onclick="showJourneyList()"><span class="mat-icon">arrow_back</span></button>
+          <span class="jd-title" id="jd-title">Learn Flutter & Dart</span>
+          <span class="gc-diff" id="jd-diff">Hard</span>
+          <div style="position:relative">
+            <button class="jd-menu-btn" onclick="toggleDropdown(event)">more_vert</button>
+            <div id="jd-dropdown" class="jd-dropdown">
+              <div class="jd-dropdown-item" onclick="editGoal()"><span class="mat-icon">edit</span> Edit Goal</div>
+              <div class="jd-dropdown-item danger" onclick="deleteGoal()"><span class="mat-icon">delete</span> Delete Goal</div>
+            </div>
+          </div>
+        </div>
+        <div class="jd-why" id="jd-why">"Build a mobile app from scratch"</div>
+        <div class="jd-stats">
+          <div class="jd-stat"><div class="jd-stat-val" id="jd-progress">67%</div><div class="jd-stat-lbl">Progress</div></div>
+          <div class="jd-stat"><div class="jd-stat-val" id="jd-days-left">12</div><div class="jd-stat-lbl">Days Left</div></div>
+          <div class="jd-stat wide"><div class="jd-stat-val" id="jd-next-up" style="font-size:16px">Navigation</div><div class="jd-stat-lbl">Next Up</div></div>
+        </div>
+        <div id="journey-map-container" class="journey-wrap"></div>
+      </div>
+    </div>
+
+    <!-- ROADMAP -->
+    <div id="screen-roadmap" class="screen">
+      <div id="roadmap-header" class="roadmap-header">
+        <span class="rh-title" id="roadmap-goal-name">Learn Flutter & Dart</span>
+        <span class="gc-diff" id="roadmap-goal-diff" style="font-size:10px;font-weight:500;padding:3px 10px;border-radius:8px;text-transform:uppercase;letter-spacing:0.3px;background:#fce4ec;color:#c62828">Hard</span>
+        <span id="roadmap-goal-progress" style="margin-left:auto;font-size:11px;color:var(--text-tertiary)">67%</span>
+      </div>
+      <div id="roadmap-ms-list" class="ms-list-scroll"></div>
+      <div class="sched-fab-container">
+        <button class="sched-fab-mini" id="ms-fab-add" onclick="openMilestoneForm()">add</button>
+        <button class="sched-fab-mini" id="ms-fab-search" onclick="openMilestoneSearch()">search</button>
+        <button class="sched-fab-mini" id="ms-fab-switch" onclick="openGoalPicker()">sync_alt</button>
+        <button class="fab" onclick="toggleMsFab()">add</button>
+      </div>
+    </div>
+
+    <!-- MOMENTUM -->
+    <div id="screen-momentum" class="screen">
+      <div class="mom-header">
+        <span class="mh-title" id="mom-goal-name">Learn Flutter & Dart</span>
+      </div>
+      <div id="mom-list" class="mom-list-scroll"></div>
+      <div class="sched-fab-container">
+        <button class="sched-fab-mini" id="mom-fab-switch" onclick="openMomentumGoalPicker()">sync_alt</button>
+        <button class="fab" onclick="toggleMomFab()">add</button>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div id="screen-schedule" class="screen">
+      <div style="display:flex;flex-direction:column;flex:1;min-height:0;position:relative">
+        <div class="sched-header">
+          <span class="brand-n">Schedule</span>
+        </div>
+        <div class="sched-filter-row">
+          <button class="sched-filter-chip active" onclick="filterSchedule(this,'all')">All</button>
+          <button class="sched-filter-chip" onclick="filterSchedule(this,'daily')">Daily</button>
+          <button class="sched-filter-chip" onclick="filterSchedule(this,'weekly')">Weekly</button>
+          <button class="sched-filter-chip" onclick="filterSchedule(this,'monthly')">Monthly</button>
+          <button class="sched-filter-chip" onclick="filterSchedule(this,'yearly')">Yearly</button>
+        </div>
+        <div class="sched-scroll">
+          <div class="sched-card" data-freq="daily" onclick="showScheduleDetail(this)">
+            <div class="sched-card-top">
+              <div class="sched-card-info">
+                <div class="sched-card-title">Morning Workout</div>
+                <div class="sched-card-meta">Daily · 8:00 AM</div>
+              </div>
+              <span class="sched-freq-badge sched-freq-daily">Daily</span>
+            </div>
+            <div class="sched-streak"><span>6-day streak</span></div>
+          </div>
+          <div class="sched-card" data-freq="daily" onclick="showScheduleDetail(this)">
+            <div class="sched-card-top">
+              <div class="sched-card-info">
+                <div class="sched-card-title">Read 30 mins</div>
+                <div class="sched-card-meta">Daily · 9:00 PM</div>
+              </div>
+              <span class="sched-freq-badge sched-freq-daily">Daily</span>
+            </div>
+            <div class="sched-streak"><span>12-day streak</span></div>
+          </div>
+          <div class="sched-card" data-freq="weekly" onclick="showScheduleDetail(this)">
+            <div class="sched-card-top">
+              <div class="sched-card-info">
+                <div class="sched-card-title">Team Standup</div>
+                <div class="sched-card-meta">Weekly · Mon, Wed, Fri · 10:00 AM</div>
+              </div>
+              <span class="sched-freq-badge sched-freq-weekly">Weekly</span>
+            </div>
+            <div class="sched-streak next-due"><span>Next: Tomorrow</span></div>
+          </div>
+          <div class="sched-card" data-freq="monthly" onclick="showScheduleDetail(this)">
+            <div class="sched-card-top">
+              <div class="sched-card-info">
+                <div class="sched-card-title">Pay Bills</div>
+                <div class="sched-card-meta">Monthly · 1st</div>
+              </div>
+              <span class="sched-freq-badge sched-freq-monthly">Monthly</span>
+            </div>
+            <div class="sched-streak next-due"><span>Next: Jul 1</span></div>
+          </div>
+          <div class="sched-card" data-freq="yearly" onclick="showScheduleDetail(this)">
+            <div class="sched-card-top">
+              <div class="sched-card-info">
+                <div class="sched-card-title">Birthday Party</div>
+                <div class="sched-card-meta">Yearly · Jun 23</div>
+              </div>
+              <span class="sched-freq-badge sched-freq-yearly">Yearly</span>
+            </div>
+            <div class="sched-streak next-due"><span>Next: Jun 23, 2027</span></div>
+          </div>
+
+          <div class="sched-fab-container">
+            <button class="sched-fab-mini" id="sched-fab-add" onclick="openScheduleForm()">add</button>
+            <button class="sched-fab-mini" id="sched-fab-search" onclick="openScheduleSearch()">search</button>
+            <button class="fab" id="sched-fab-main" onclick="toggleSchedFab()">add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE DETAIL -->
+    <div id="screen-sched-detail" class="screen" style="display:none;flex-direction:column;min-height:0">
+      <div style="display:flex;flex-direction:column;flex:1;min-height:0;padding:0">
+        <div class="journey-detail-header" style="padding:8px 16px 0">
+          <button class="back-btn" onclick="closeScheduleDetail()"><span class="mat-icon">arrow_back</span></button>
+          <span class="jd-title">Morning Workout</span>
+          <div style="position:relative">
+            <button class="jd-menu-btn" onclick="toggleSchedDropdown(event)">more_vert</button>
+            <div id="sched-dropdown" class="jd-dropdown">
+              <div class="jd-dropdown-item" onclick="editScheduleTask()"><span class="mat-icon">edit</span> Edit Task</div>
+              <div class="jd-dropdown-item danger" onclick="deleteScheduleTask()"><span class="mat-icon">delete</span> Delete Task</div>
+            </div>
+          </div>
+        </div>
+        <div class="sched-detail-scroll" style="padding:8px 16px 0">
+          <div class="sd-header">
+            <div class="sd-title-row">
+              <span class="sd-meta">Daily at 8:00 AM</span>
+              <span class="sched-freq-badge sched-freq-daily">Daily</span>
+            </div>
+          </div>
+          <div class="sd-stats">
+            <div class="sd-stat"><div class="sd-stat-val">6</div><div class="sd-stat-lbl">Day Streak</div></div>
+            <div class="sd-stat"><div class="sd-stat-val">80%</div><div class="sd-stat-lbl">This Month</div></div>
+            <div class="sd-stat"><div class="sd-stat-val">24</div><div class="sd-stat-lbl">Total Done</div></div>
+          </div>
+          <div class="sd-calendar">
+            <div class="sd-cal-header">
+              <button class="sd-cal-nav" onclick="schedCalNav(-1)">chevron_left</button>
+              <span class="sd-cal-month" id="sched-cal-month">June 2026</span>
+              <button class="sd-cal-nav" onclick="schedCalNav(1)">chevron_right</button>
+            </div>
+            <div class="sd-cal-grid" id="sched-cal-grid">
+              <span class="sd-cal-day-header">S</span>
+              <span class="sd-cal-day-header">M</span>
+              <span class="sd-cal-day-header">T</span>
+              <span class="sd-cal-day-header">W</span>
+              <span class="sd-cal-day-header">T</span>
+              <span class="sd-cal-day-header">F</span>
+              <span class="sd-cal-day-header">S</span>
+              <!-- filled by JS on open -->
+            </div>
+            <div style="height:4px"></div>
+          </div>
+          <div class="sd-instance-list">
+            <div class="sd-instance-header">Recent Activity</div>
+            <div class="sd-instance-item" id="sched-today-row">
+              <span class="sd-instance-date">Jun 23 <span style="color:var(--primary);font-weight:500">(Today)</span></span>
+              <span class="sd-instance-status pending" id="sched-today-status">radio_button_unchecked</span>
+              <span style="font-size:10px;color:var(--text-tertiary)">—</span>
+            </div>
+            <div class="sd-instance-item">
+              <span class="sd-instance-date">Jun 22</span>
+              <span class="sd-instance-status done" style="color:#81c995">Done</span>
+              <span style="font-size:10px;color:var(--text-tertiary)">6:02 AM</span>
+            </div>
+            <div class="sd-instance-item">
+              <span class="sd-instance-date">Jun 21</span>
+              <span class="sd-instance-status done" style="color:#81c995">Done</span>
+              <span style="font-size:10px;color:var(--text-tertiary)">7:45 AM</span>
+            </div>
+            <div class="sd-instance-item">
+              <span class="sd-instance-date">Jun 20</span>
+              <span class="sd-instance-status done" style="color:#81c995">Done</span>
+              <span style="font-size:10px;color:var(--text-tertiary)">8:10 AM</span>
+            </div>
+            <div class="sd-instance-item">
+              <span class="sd-instance-date">Jun 19</span>
+              <span class="sd-instance-status missed">Missed</span>
+              <span style="font-size:10px;color:var(--text-tertiary)">No reason</span>
+            </div>
+            <div class="sd-instance-item">
+              <span class="sd-instance-date">Jun 18</span>
+              <span class="sd-instance-status missed">Missed</span>
+              <span style="font-size:10px;color:#e65100">Vacation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div id="screen-profile" class="screen">
+      <div class="profile-header">
+        <div class="profile-avatar-wrap">
+          <div id="profile-avatar-display" class="profile-avatar">M</div>
+          <div class="avatar-edit-badge">photo_camera</div>
+        </div>
+        <div class="profile-name-row">
+          <span id="profile-name-display" class="profile-name">Milestone User</span>
+          <span class="profile-name-edit">edit</span>
+        </div>
+        <div id="profile-email-display" class="profile-email">user@milestone.app</div>
+      </div>
+      <div class="profile-scroll">
+        <div class="settings-item" onclick="openAchievements()"><span class="mat-icon">emoji_events</span><span class="si-label">Achievements</span><span class="si-value">4 unlocked</span><span class="si-arrow">chevron_right</span></div>
+        <div class="settings-item" onclick="openThemePicker()"><span class="mat-icon">palette</span><span class="si-label">Theme</span><span id="theme-value" class="si-value">Midnight</span><span class="si-arrow">chevron_right</span></div>
+        <div class="settings-item"><span class="mat-icon">label</span><span class="si-label">Navigation Labels</span><button id="nav-labels-toggle" class="settings-toggle on" onclick="toggleNavLabels()"></button></div>
+        <div class="settings-item"><span class="mat-icon">notifications</span><span class="si-label">Reminders</span><button class="settings-toggle on"></button></div>
+        <div class="settings-item"><span class="mat-icon">backup</span><span class="si-label">Export Data</span><span class="si-arrow">chevron_right</span></div>
+        <div class="settings-item"><span class="mat-icon">share</span><span class="si-label">Share Milestone</span><span class="si-arrow">chevron_right</span></div>
+        <div class="settings-item"><span class="mat-icon">info</span><span class="si-label">About</span><span class="si-value">v1.0.0</span><span class="si-arrow">chevron_right</span></div>
+      </div>
+    </div>
+
+    <!-- GOAL FORM (overlay) -->
+    <div id="screen-form" class="form-screen">
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-title">New Goal</div>
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input class="form-input" placeholder="e.g. Learn Flutter" value="Learn Flutter & Dart" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Why is this important?</label>
+          <textarea class="form-input form-textarea" placeholder="Your motivation…">Build a mobile app from scratch</textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Difficulty</label>
+            <select class="form-select">
+              <option>Easy</option>
+              <option>Medium</option>
+              <option selected>Hard</option>
+              <option>Epic</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target Date</label>
+            <input class="form-input" type="date" value="2026-08-15" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Icon</label>
+          <div class="goal-icon-picker">
+            <button class="goal-icon-opt active" onclick="selectGoalIcon(this,'flag')"><span class="mat-icon">flag</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'menu_book')"><span class="mat-icon">menu_book</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'directions_run')"><span class="mat-icon">directions_run</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'routine')"><span class="mat-icon">routine</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'fitness_center')"><span class="mat-icon">fitness_center</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'music_note')"><span class="mat-icon">music_note</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'palette')"><span class="mat-icon">palette</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'code')"><span class="mat-icon">code</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'travel_explore')"><span class="mat-icon">travel_explore</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'savings')"><span class="mat-icon">savings</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'restaurant')"><span class="mat-icon">restaurant</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'self_improvement')"><span class="mat-icon">self_improvement</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'school')"><span class="mat-icon">school</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'favorite')"><span class="mat-icon">favorite</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'pets')"><span class="mat-icon">pets</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'flight')"><span class="mat-icon">flight</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'language')"><span class="mat-icon">language</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'camera_alt')"><span class="mat-icon">camera_alt</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'yard')"><span class="mat-icon">yard</span></button>
+            <button class="goal-icon-opt" onclick="selectGoalIcon(this,'camping')"><span class="mat-icon">camping</span></button>
+          </div>
+        </div>
+        <div class="form-btn-row">
+          <button class="btn-secondary" onclick="closeForm()">Cancel</button>
+          <button class="btn-primary" onclick="closeForm()">Save Goal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE FORM (overlay) -->
+    <div id="screen-sched-form" class="form-screen">
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-title">New Scheduled Task</div>
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input id="sched-form-title" class="form-input" placeholder="e.g. Morning Workout" value="Morning Workout" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description (optional)</label>
+          <textarea id="sched-form-desc" class="form-input form-textarea" placeholder="Describe this task…"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Frequency</label>
+          <div class="sched-freq-picker">
+            <button class="sched-freq-chip active" onclick="selectSchedFreq(this,'daily')">Daily</button>
+            <button class="sched-freq-chip" onclick="selectSchedFreq(this,'weekly')">Weekly</button>
+            <button class="sched-freq-chip" onclick="selectSchedFreq(this,'monthly')">Monthly</button>
+            <button class="sched-freq-chip" onclick="selectSchedFreq(this,'yearly')">Yearly</button>
+          </div>
+        </div>
+        <!-- Weekly days (hidden by default, shown when weekly selected) -->
+        <div id="sched-weekly-section" class="sched-dynamic-section" style="display:none">
+          <div class="sched-dynamic-label">Repeat on</div>
+          <div class="day-chips">
+            <button class="day-chip active" onclick="this.classList.toggle('active')">Mon</button>
+            <button class="day-chip active" onclick="this.classList.toggle('active')">Tue</button>
+            <button class="day-chip active" onclick="this.classList.toggle('active')">Wed</button>
+            <button class="day-chip" onclick="this.classList.toggle('active')">Thu</button>
+            <button class="day-chip active" onclick="this.classList.toggle('active')">Fri</button>
+            <button class="day-chip" onclick="this.classList.toggle('active')">Sat</button>
+            <button class="day-chip" onclick="this.classList.toggle('active')">Sun</button>
+          </div>
+        </div>
+        <!-- Monthly day (hidden by default) -->
+        <div id="sched-monthly-section" class="sched-dynamic-section" style="display:none">
+          <div class="sched-dynamic-label">Day of month</div>
+          <select class="form-select" style="width:auto">
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+            <option>11</option><option>12</option><option>13</option><option>14</option><option selected>15</option>
+            <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+            <option>21</option><option>22</option><option>23</option><option>24</option><option>25</option>
+            <option>26</option><option>27</option><option>28</option><option>29</option><option>30</option>
+            <option>31</option><option value="last">Last day</option>
+          </select>
+        </div>
+        <!-- Yearly date (hidden by default) -->
+        <div id="sched-yearly-section" class="sched-dynamic-section" style="display:none">
+          <div class="sched-dynamic-label">Date</div>
+          <div style="display:flex;gap:8px">
+            <select class="form-select" style="flex:1">
+              <option>Jan</option><option>Feb</option><option>Mar</option><option>Apr</option><option>May</option>
+              <option selected>Jun</option><option>Jul</option><option>Aug</option><option>Sep</option><option>Oct</option>
+              <option>Nov</option><option>Dec</option>
+            </select>
+            <select class="form-select" style="flex:1">
+              <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+              <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+              <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
+              <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+              <option>21</option><option>22</option><option selected>23</option><option>24</option><option>25</option>
+              <option>26</option><option>27</option><option>28</option><option>29</option><option>30</option>
+              <option>31</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Time (optional)</label>
+          <input class="form-input" type="time" value="08:00" style="width:auto" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">End Condition</label>
+          <div class="end-row">
+            <select class="form-select" id="sched-end-type" onchange="toggleSchedEndType(this)">
+              <option value="never">Never</option>
+              <option value="after_n">After N times</option>
+              <option value="on_date">On date</option>
+            </select>
+            <input class="form-input" id="sched-end-n" type="number" min="1" value="10" placeholder="N" style="display:none" />
+            <input class="form-input" id="sched-end-date" type="date" value="2026-12-31" style="display:none" />
+          </div>
+        </div>
+        <div class="form-btn-row">
+          <button class="btn-secondary" onclick="closeScheduleForm()">Cancel</button>
+          <button class="btn-primary" onclick="closeScheduleForm()">Create Task</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOAL SEARCH (overlay) -->
+    <div id="screen-goal-search" class="theme-screen" onclick="if(event.target===this)closeGoalSearch()">
+      <div class="theme-sheet" style="max-height:60%;overflow:hidden;display:flex;flex-direction:column">
+        <div class="achievements-header">
+          <span class="modal-title">Search Goals</span>
+          <button class="achievements-close" onclick="closeGoalSearch()">close</button>
+        </div>
+        <div style="padding:0 4px;margin-bottom:12px">
+          <input id="goal-search-input" class="form-input" type="text" placeholder="Type goal title…" oninput="filterGoalSearch(this.value)" autofocus />
+        </div>
+        <div id="goal-search-results" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:0 4px">
+        </div>
+      </div>
+    </div>
+
+    <!-- MILESTONE SEARCH (overlay) -->
+    <div id="screen-ms-search" class="theme-screen" onclick="if(event.target===this)closeMilestoneSearch()">
+      <div class="theme-sheet" style="max-height:60%;overflow:hidden;display:flex;flex-direction:column">
+        <div class="achievements-header">
+          <span class="modal-title">Search Milestones</span>
+          <button class="achievements-close" onclick="closeMilestoneSearch()">close</button>
+        </div>
+        <div style="padding:0 4px;margin-bottom:12px">
+          <input id="ms-search-input" class="form-input" type="text" placeholder="Type milestone title…" oninput="filterMilestoneSearch(this.value)" autofocus />
+        </div>
+        <div id="ms-search-results" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:0 4px">
+        </div>
+      </div>
+    </div>
+
+    <!-- GOAL PICKER (overlay) -->
+    <div id="screen-goal-picker" class="theme-screen" onclick="if(event.target===this)closeGoalPicker()">
+      <div class="theme-sheet" style="max-height:60%;overflow:hidden;display:flex;flex-direction:column">
+        <div class="achievements-header">
+          <span class="modal-title">Switch Goal</span>
+          <button class="achievements-close" onclick="closeGoalPicker()">close</button>
+        </div>
+        <div id="goal-picker-list" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:0 4px">
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE SEARCH (overlay) -->
+    <div id="screen-sched-search" class="theme-screen" onclick="if(event.target===this)closeScheduleSearch()">
+      <div class="theme-sheet" style="max-height:60%;overflow:hidden;display:flex;flex-direction:column">
+        <div class="achievements-header">
+          <span class="modal-title">Search Tasks</span>
+          <button class="achievements-close" onclick="closeScheduleSearch()">close</button>
+        </div>
+        <div style="padding:0 4px;margin-bottom:12px">
+          <input id="sched-search-input" class="form-input" type="text" placeholder="Type task title…" oninput="filterScheduleSearch(this.value)" autofocus />
+        </div>
+        <div id="sched-search-results" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:0 4px">
+        </div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS (overlay) -->
+    <div id="screen-achievements" class="achievements-screen" onclick="if(event.target===this)closeAchievements()">
+      <div class="achievements-sheet">
+        <div class="achievements-header">
+          <div class="modal-title">Achievements</div>
+          <button class="achievements-close" onclick="closeAchievements()">close</button>
+        </div>
+        <div class="ach-count"><span>4</span> of 8 unlocked</div>
+        <div class="ach-grid">
+          <div class="ach-card earned">
+            <span class="ach-icon">flag</span>
+            <div class="ach-name">First Goal</div>
+            <div class="ach-desc">Create your first goal</div>
+            <div class="ach-status">Earned</div>
+          </div>
+          <div class="ach-card earned">
+            <span class="ach-icon">checklist</span>
+            <div class="ach-name">Task Crusher</div>
+            <div class="ach-desc">Complete 25 tasks</div>
+            <div class="ach-status">Earned</div>
+          </div>
+          <div class="ach-card earned">
+            <span class="ach-icon">layers</span>
+            <div class="ach-name">Milestone Master</div>
+            <div class="ach-desc">Complete 5 milestones</div>
+            <div class="ach-status">Earned</div>
+          </div>
+          <div class="ach-card earned">
+            <span class="ach-icon">local_fire_department</span>
+            <div class="ach-name">On Fire</div>
+            <div class="ach-desc">Maintain a 7-day streak</div>
+            <div class="ach-status">Earned</div>
+          </div>
+          <div class="ach-card locked">
+            <span class="ach-icon">emoji_events</span>
+            <div class="ach-name">Finish Line</div>
+            <div class="ach-desc">Complete a goal at 100%</div>
+            <div class="ach-status">Locked</div>
+          </div>
+          <div class="ach-card locked">
+            <span class="ach-icon">explore</span>
+            <div class="ach-name">Explorer</div>
+            <div class="ach-desc">Goals in all 4 difficulties</div>
+            <div class="ach-status">Locked</div>
+          </div>
+          <div class="ach-card locked">
+            <span class="ach-icon">stars</span>
+            <div class="ach-name">Centurion</div>
+            <div class="ach-desc">Complete 100 tasks</div>
+            <div class="ach-status">Locked</div>
+          </div>
+          <div class="ach-card locked">
+            <span class="ach-icon">calendar_month</span>
+            <div class="ach-name">Dedicated</div>
+            <div class="ach-desc">30-day streak</div>
+            <div class="ach-status">Locked</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIRM DIALOG -->
+    <div id="confirm-overlay" class="confirm-overlay" onclick="if(event.target===this)closeConfirm()">
+      <div class="confirm-dialog">
+        <div class="confirm-title">Delete Goal?</div>
+        <div id="confirm-body" class="confirm-body">This will also remove all milestones and tasks.</div>
+        <div class="confirm-actions">
+          <button class="btn-secondary" onclick="closeConfirm()">Cancel</button>
+          <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULED TASK DELETE CONFIRM -->
+    <div id="confirm-sched-overlay" class="confirm-overlay" onclick="if(event.target===this)closeSchedDeleteConfirm()">
+      <div class="confirm-dialog">
+        <div class="confirm-title">Delete Task?</div>
+        <div class="confirm-body">This will permanently remove this scheduled task and all its history.</div>
+        <div class="confirm-actions">
+          <button class="btn-secondary" onclick="closeSchedDeleteConfirm()">Cancel</button>
+          <button class="btn-danger" onclick="confirmSchedDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MISSED REASON (overlay) -->
+    <div id="screen-skip-reason" class="theme-screen" onclick="if(event.target===this)closeSkipReason()">
+      <div class="theme-sheet">
+        <div class="achievements-header">
+          <div class="modal-title">Why Did You Miss?</div>
+          <button class="achievements-close" onclick="closeSkipReason()">close</button>
+        </div>
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;padding:0 4px">
+          Adding a reason won't mark it done, but it explains the gap and won't reset your streak.
+        </div>
+        <div id="sched-reason-presets" style="display:flex;flex-direction:column;gap:8px">
+          <button class="skip-reason-btn" onclick="selectSkipReason(this,'vacation')">
+            <span class="mat-icon" style="font-size:22px;color:var(--primary);font-variation-settings:'FILL'0">flight</span>
+            <span style="flex:1;text-align:left">Vacation</span>
+            <span class="mat-icon" style="font-size:18px;color:var(--text-muted)">chevron_right</span>
+          </button>
+          <button class="skip-reason-btn" onclick="selectSkipReason(this,'sick')">
+            <span class="mat-icon" style="font-size:22px;color:#f28b82;font-variation-settings:'FILL'0">masks</span>
+            <span style="flex:1;text-align:left">Sick Day</span>
+            <span class="mat-icon" style="font-size:18px;color:var(--text-muted)">chevron_right</span>
+          </button>
+          <button class="skip-reason-btn" onclick="selectSkipReason(this,'busy')">
+            <span class="mat-icon" style="font-size:22px;color:#fbbf24;font-variation-settings:'FILL'0">event_busy</span>
+            <span style="flex:1;text-align:left">Too Busy</span>
+            <span class="mat-icon" style="font-size:18px;color:var(--text-muted)">chevron_right</span>
+          </button>
+          <button class="skip-reason-btn" onclick="openCustomReason()">
+            <span class="mat-icon" style="font-size:22px;color:var(--text-tertiary);font-variation-settings:'FILL'0">more_horiz</span>
+            <span style="flex:1;text-align:left">Other</span>
+            <span class="mat-icon" style="font-size:18px;color:var(--text-muted)">chevron_right</span>
+          </button>
+        </div>
+        <div id="sched-reason-custom" style="display:none;flex-direction:column;gap:10px">
+          <input id="sched-custom-reason-input" class="form-input" placeholder="Type your reason…" maxlength="100" autofocus />
+          <div class="form-btn-row" style="margin-top:0">
+            <button class="btn-secondary" onclick="closeCustomReason()">Back</button>
+            <button class="btn-primary" onclick="submitCustomReason()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THEME PICKER (overlay) -->
+    <div id="screen-theme" class="theme-screen" onclick="if(event.target===this)closeThemePicker()">
+      <div class="theme-sheet">
+        <div class="achievements-header">
+          <div class="modal-title">Choose Theme</div>
+          <button class="achievements-close" onclick="closeThemePicker()">close</button>
+        </div>
+        <div class="theme-grid">
+          <div class="theme-option active" onclick="selectTheme('midnight')">
+            <div class="theme-swatches">
+              <span class="theme-swatch bg-swatch" style="background:#1c1b1f"></span>
+              <span class="theme-swatch" style="background:#2b2930"></span>
+              <span class="theme-swatch" style="background:#d0bcff"></span>
+            </div>
+            <span class="theme-label">Midnight</span>
+          </div>
+          <div class="theme-option" onclick="selectTheme('charcoal')">
+            <div class="theme-swatches">
+              <span class="theme-swatch bg-swatch" style="background:#151318"></span>
+              <span class="theme-swatch" style="background:#232126"></span>
+              <span class="theme-swatch" style="background:#c5b0f5"></span>
+            </div>
+            <span class="theme-label">Charcoal</span>
+          </div>
+          <div class="theme-option" onclick="selectTheme('obsidian')">
+            <div class="theme-swatches">
+              <span class="theme-swatch bg-swatch" style="background:#0e0d12"></span>
+              <span class="theme-swatch" style="background:#1a191e"></span>
+              <span class="theme-swatch" style="background:#ccb9f0"></span>
+            </div>
+            <span class="theme-label">Obsidian</span>
+          </div>
+          <div class="theme-option" onclick="selectTheme('deep-navy')">
+            <div class="theme-swatches">
+              <span class="theme-swatch bg-swatch" style="background:#111422"></span>
+              <span class="theme-swatch" style="background:#1e2132"></span>
+              <span class="theme-swatch" style="background:#b8c4ff"></span>
+            </div>
+            <span class="theme-label">Deep Navy</span>
+          </div>
+          <div class="theme-option" onclick="selectTheme('slate')">
+            <div class="theme-swatches">
+              <span class="theme-swatch bg-swatch" style="background:#17191d"></span>
+              <span class="theme-swatch" style="background:#24262b"></span>
+              <span class="theme-swatch" style="background:#c4cbd5"></span>
+            </div>
+            <span class="theme-label">Slate</span>
+          </div>
+          <div class="theme-option" onclick="selectTheme('cream')">
+            <div class="theme-swatches">
+              <span class="theme-swatch bg-swatch" style="background:#fffbf5"></span>
+              <span class="theme-swatch" style="background:#f5efe6"></span>
+              <span class="theme-swatch" style="background:#7c5fa0"></span>
+            </div>
+            <span class="theme-label">Cream</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD MILESTONE FORM (overlay) -->
+    <div id="screen-milestone-form" class="form-screen">
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-title">Add Milestone</div>
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input id="ms-title-input" class="form-input" placeholder="e.g. Database Design" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Weight</label>
+          <div class="weight-selector">
+            <button class="weight-btn active" onclick="selectWeight(this, 1)">★</button>
+            <button class="weight-btn" onclick="selectWeight(this, 2)">★★</button>
+            <button class="weight-btn" onclick="selectWeight(this, 3)">★★★</button>
+            <button class="weight-btn" onclick="selectWeight(this, 4)">★★★★</button>
+            <button class="weight-btn" onclick="selectWeight(this, 5)">★★★★★</button>
+          </div>
+        </div>
+        <div class="form-btn-row">
+          <button class="btn-secondary" onclick="closeMilestoneForm()">Cancel</button>
+          <button class="btn-primary" onclick="closeMilestoneForm()">Add Milestone</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTH OVERLAY (sibling to bottom-nav, covers everything) -->
+  <div id="auth-overlay" class="auth-overlay">
+    <div class="auth-top">
+      <div class="auth-logo">
+        <svg viewBox="0 0 40 40">
+          <path d="M11 30 C 19 27, 16 18, 22 15 S 27 10, 29 10" fill="none" stroke-width="2.6" stroke-linecap="round" opacity="0.95"/>
+          <circle cx="11" cy="30" r="2.6"/><circle cx="29" cy="10" r="3.6"/>
+        </svg>
+      </div>
+      <div class="auth-title">Milestone</div>
+      <div class="auth-sub">Reach the finish line</div>
+    </div>
+    <div class="auth-btn-row">
+      <button class="btn-google" onclick="selectAuth('google')">
+        <span class="google-icon">
+          <svg viewBox="0 0 20 20" width="20" height="20"><path d="M19.6 10.2c0-.7-.1-1.4-.2-2H10v3.8h5.4a4.5 4.5 0 01-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z" fill="#4285F4"/><path d="M10 20c2.7 0 5-1 6.6-2.5l-3.2-2.5c-.9.6-2 1-3.4 1a5.5 5.5 0 01-5.2-3.8H1.5v2.6A10 10 0 0010 20z" fill="#34A853"/><path d="M4.8 12.2a5.5 5.5 0 010-3.4V6.2H1.5a10 10 0 000 8.6l3.3-2.6z" fill="#FBBC05"/><path d="M10 3.8c1.5 0 2.8.5 3.8 1.6l2.8-2.8A10 10 0 001.5 6.2l3.3 2.6A5.5 5.5 0 0110 3.8z" fill="#EA4335"/></svg>
+        </span>
+        Continue with Google
+      </button>
+      <button class="btn-guest" onclick="selectAuth('guest')">Continue as Guest</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="navTo('journey')">
+      <div class="nav-icon-wrap"><span class="mat-icon">explore</span></div>
+      <span class="nav-label">Journey</span>
+    </button>
+    <button class="nav-item" onclick="navTo('roadmap')">
+      <div class="nav-icon-wrap"><span class="mat-icon">checklist</span></div>
+      <span class="nav-label">Roadmap</span>
+    </button>
+    <button class="nav-item" onclick="navTo('momentum')">
+      <div class="nav-icon-wrap"><span class="mat-icon">trending_up</span></div>
+      <span class="nav-label">Momentum</span>
+    </button>
+    <button class="nav-item" onclick="navTo('schedule')">
+      <div class="nav-icon-wrap"><span class="mat-icon">calendar_month</span></div>
+      <span class="nav-label">Schedule</span>
+    </button>
+    <button class="nav-item" onclick="navTo('profile')">
+      <div class="nav-icon-wrap"><span class="mat-icon">person</span></div>
+      <span class="nav-label">Profile</span>
+    </button>
+  </div>
+</div>
+
+<script>
+let screenOrder = ['journey', 'roadmap', 'momentum', 'schedule', 'profile'];
+let appAuth = null;
+
+function navTo(id) {
+  if (id === 'splash' || id === 'auth') return;
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  if (id === 'schedule') {
+    document.getElementById('screen-sched-detail').style.display = 'none';
+  }
+  if (id === 'momentum') {
+    renderMomentum();
+  }
+  document.getElementById('screen-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach((item, i) => {
+    item.classList.toggle('active', screenOrder.indexOf(id) === i);
+  });
+}
+
+function goToMilestone(goalId, msId) {
+  // Update roadmap to this goal
+  _currentRoadmapGoal = goalId;
+  renderRoadmapMilestones();
+  // Navigate to roadmap
+  navTo('roadmap');
+  // Scroll to the milestone card and highlight it
+  setTimeout(function() {
+    var card = document.querySelector('.ms-card[data-id="' + msId + '"]');
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.style.transition = 'box-shadow 0.3s';
+      card.style.boxShadow = '0 0 0 2px var(--primary), 0 2px 12px rgba(208,188,255,0.4)';
+      setTimeout(function() { card.style.boxShadow = ''; }, 2000);
+      // Expand the milestone body
+      var header = card.querySelector('.ms-header');
+      if (header) toggleMS(header);
+    }
+  }, 100);
+}
+
+setTimeout(() => {
+  document.getElementById('screen-splash').classList.remove('active');
+  document.getElementById('auth-overlay').classList.add('active');
+}, 1800);
+
+function selectAuth(mode) {
+  appAuth = mode;
+  document.getElementById('auth-overlay').classList.remove('active');
+  updateProfile();
+  navTo('journey');
+}
+
+function updateProfile() {
+  const emailEl = document.getElementById('profile-email-display');
+  const avatarEl = document.getElementById('profile-avatar-display');
+  const nameEl = document.getElementById('profile-name-display');
+  if (!appAuth) return;
+  if (appAuth === 'google') {
+    emailEl.style.display = 'block';
+    emailEl.textContent = 'user@milestone.app';
+    avatarEl.textContent = 'M';
+    avatarEl.style.background = '';
+    nameEl.textContent = 'Milestone User';
+  } else {
+    emailEl.style.display = 'none';
+    avatarEl.textContent = 'G';
+    avatarEl.style.background = '';
+    nameEl.textContent = 'Guest';
+  }
+}
+
+let editingGoalCard = null;
+
+function showJourneyDetail(el) {
+  editingGoalCard = el || document.querySelector('.goal-card');
+  document.getElementById('journey-list').style.display = 'none';
+  document.getElementById('journey-detail').style.display = 'flex';
+  var goalId = el ? el.getAttribute('data-goal-id') : (_currentRoadmapGoal || 'flutter');
+  _currentRoadmapGoal = goalId;
+  renderJourneyMap(goalId);
+}
+
+function showJourneyList() {
+  document.getElementById('journey-list').style.display = 'flex';
+  document.getElementById('journey-detail').style.display = 'none';
+  document.getElementById('jd-dropdown').classList.remove('active');
+}
+
+function toggleDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('jd-dropdown');
+  dd.classList.toggle('active');
+  setTimeout(() => document.addEventListener('click', closeDropdown, { once: true }), 0);
+}
+
+function closeDropdown() {
+  document.getElementById('jd-dropdown').classList.remove('active');
+}
+
+function editGoal() {
+  document.getElementById('jd-dropdown').classList.remove('active');
+  document.querySelector('.modal-title').textContent = 'Edit Goal';
+  openForm();
+}
+
+function deleteGoal() {
+  document.getElementById('jd-dropdown').classList.remove('active');
+  document.getElementById('confirm-overlay').classList.add('active');
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.remove('active');
+}
+
+function confirmDelete() {
+  document.getElementById('confirm-overlay').classList.remove('active');
+  if (editingGoalCard) {
+    editingGoalCard.remove();
+    editingGoalCard = null;
+  }
+  showJourneyList();
+}
+
+function toggleMS(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.ms-chevron');
+  if (!body.style.display || body.style.display === 'none') {
+    body.style.display = 'block';
+    chevron.classList.add('open');
+  } else {
+    body.style.display = 'none';
+    chevron.classList.remove('open');
+  }
+}
+
+function toggleGoalFab() {
+  var container = document.getElementById('goal-fab-add').parentElement;
+  container.classList.toggle('open');
+  if (container.classList.contains('open')) {
+    setTimeout(function() {
+      document.addEventListener('click', function closeGoalFab(e) {
+        if (!container.contains(e.target)) {
+          container.classList.remove('open');
+          document.removeEventListener('click', closeGoalFab);
+        }
+      }, { once: true });
+    }, 0);
+  }
+}
+
+function openGoalSearch() {
+  document.getElementById('goal-fab-add').parentElement.classList.remove('open');
+  document.getElementById('screen-goal-search').classList.add('active');
+  document.getElementById('goal-search-input').value = '';
+  document.getElementById('goal-search-results').innerHTML = '';
+  setTimeout(function() { document.getElementById('goal-search-input').focus(); }, 100);
+}
+
+function toggleNavLabels() {
+  var btn = document.getElementById('nav-labels-toggle');
+  btn.classList.toggle('on');
+  var nav = document.querySelector('.bottom-nav');
+  nav.classList.toggle('no-labels', !btn.classList.contains('on'));
+}
+
+function closeGoalSearch() {
+  document.getElementById('screen-goal-search').classList.remove('active');
+}
+
+function filterGoalSearch(query) {
+  var container = document.getElementById('goal-search-results');
+  container.innerHTML = '';
+  if (!query.trim()) return;
+  var q = query.toLowerCase();
+  var matches = [];
+  for (var key in _roadmapGoals) {
+    if (_roadmapGoals[key].name.toLowerCase().includes(q)) {
+      matches.push({ id: key, g: _roadmapGoals[key] });
+    }
+  }
+  if (matches.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:24px 0;color:var(--text-tertiary);font-size:13px">No goals found</div>';
+    return;
+  }
+  matches.forEach(function(t) {
+    var g = t.g;
+    // Calculate total tasks across all milestones for progress
+    var totalTasks = 0, doneTasks = 0;
+    g.milestones && g.milestones.forEach(function(ms) {
+      ms.tasks.forEach(function(task) { totalTasks++; if (task.done) doneTasks++; });
+    });
+    var pct = totalTasks ? Math.round(doneTasks / totalTasks * 100) : 0;
+    var card = document.createElement('div');
+    card.className = 'sched-search-item';
+    card.onclick = function() {
+      closeGoalSearch();
+      _currentRoadmapGoal = t.id;
+      showJourneyDetail();
+    };
+    card.innerHTML =
+      '<span class="mat-icon" style="font-size:20px;width:28px">' + (g.icon || 'flag') + '</span>' +
+      '<div class="sched-search-info">' +
+        '<div class="sched-search-title">' + g.name + '</div>' +
+        '<div class="sched-search-meta">' + pct + '% · ' + (g.milestones ? g.milestones.length : 0) + ' milestones</div>' +
+      '</div>' +
+      '<span class="gc-diff diff-' + g.diff.toLowerCase() + '" style="font-size:10px;padding:2px 8px;border-radius:4px">' + g.diff + '</span>';
+    container.appendChild(card);
+  });
+}
+
+var _selectedGoalIcon = 'flag';
+
+function selectGoalIcon(el, icon) {
+  document.querySelectorAll('.goal-icon-opt').forEach(function(b) { b.classList.remove('active'); });
+  el.classList.add('active');
+  _selectedGoalIcon = icon;
+}
+
+function openForm() {
+  document.querySelector('.modal-title').textContent = 'New Goal';
+  document.getElementById('screen-form').classList.add('active');
+}
+
+function closeForm() {
+  document.getElementById('screen-form').classList.remove('active');
+}
+
+_roadmapGoals = {
+  flutter: {
+    name: 'Learn Flutter & Dart', diff: 'Hard', diffClass: 'diff-hard', icon: 'flag',
+    why: 'Build a mobile app from scratch',
+    createdAt: '2026-03-01', targetDate: '2026-08-15',
+    milestones: [
+      { id: 's1', title: 'Project Setup', status: 'done', weight: 2, tasks: [
+        { done: true, text: 'Install Flutter SDK' },
+        { done: true, text: 'Create project scaffold' },
+        { done: true, text: 'Configure dependencies' },
+      ]},
+      { id: 's2', title: 'Navigation & Routing', status: 'active', weight: 4, tasks: [
+        { done: true, text: 'Design route map' },
+        { done: false, text: 'Implement Navigator 2.0' },
+        { done: false, text: 'Add bottom navigation' },
+      ]},
+      { id: 's3', title: 'Dark Theme', status: 'todo', weight: 3, tasks: [
+        { done: false, text: 'Define color palette' },
+      ]},
+    ],
+    momentum: { streak: 6,
+      activity: [
+        { text: 'Completed task: "Implement Navigator 2.0"', time: 'Today, 2:34 PM' },
+        { text: 'Milestone "Navigation" marked active', time: 'Today, 11:20 AM' },
+        { text: 'Created goal "Learn Flutter & Dart"', time: 'Yesterday, 8:15 PM' },
+      ]
+    }
+  },
+  books: {
+    name: 'Read 12 Books This Year', diff: 'Medium', diffClass: 'diff-medium', icon: 'menu_book',
+    why: 'Expand my horizons through reading',
+    createdAt: '2026-01-01', targetDate: '2026-12-31',
+    milestones: [
+      { id: 'b1', title: 'Non-Fiction List', status: 'active', weight: 2, tasks: [
+        { done: false, text: 'Pick 6 non-fiction titles' },
+        { done: false, text: 'Set reading schedule' },
+      ]},
+      { id: 'b2', title: 'Fiction List', status: 'todo', weight: 1, tasks: [
+        { done: false, text: 'Pick 6 fiction titles' },
+      ]},
+    ],
+    momentum: { streak: 3,
+      activity: [
+        { text: 'Added "Read 12 Books" goal', time: '3 days ago' },
+        { text: 'Picked 2 non-fiction titles', time: '2 days ago' },
+      ]
+    }
+  },
+  marathon: {
+    name: 'Run a Half Marathon', diff: 'Epic', diffClass: 'diff-epic', icon: 'directions_run',
+    why: 'Push my physical limits',
+    createdAt: '2026-04-01', targetDate: '2026-10-01',
+    milestones: [
+      { id: 'm1', title: 'Base Building', status: 'done', weight: 2, tasks: [
+        { done: true, text: 'Run 5K consistently' },
+        { done: true, text: 'Join a running group' },
+      ]},
+      { id: 'm2', title: 'Speed Work', status: 'active', weight: 3, tasks: [
+        { done: true, text: 'Interval training' },
+        { done: false, text: 'Tempo runs' },
+      ]},
+    ],
+    momentum: { streak: 5,
+      activity: [
+        { text: 'Completed "Run 5K consistently"', time: 'Today, 6:30 AM' },
+        { text: 'Joined running group', time: 'Yesterday' },
+      ]
+    }
+  },
+  routine: {
+    name: 'Morning Routine', diff: 'Easy', diffClass: 'diff-easy', icon: 'routine',
+    why: 'Start each day with intention',
+    createdAt: '2026-06-01', targetDate: '2026-07-01',
+    milestones: [
+      { id: 'r1', title: 'Wake Up Early', status: 'active', weight: 1, tasks: [
+        { done: false, text: 'Set alarm for 6 AM' },
+        { done: false, text: 'No snooze' },
+      ]},
+    ],
+    momentum: { streak: 0,
+      activity: [
+        { text: 'Created "Morning Routine" goal', time: '5 days ago' },
+      ]
+    }
+  },
+};
+
+var _currentRoadmapGoal = 'flutter';
+
+function openGoalPicker() {
+  document.getElementById('ms-fab-add').parentElement.classList.remove('open');
+  renderGoalPickerList();
+  document.getElementById('screen-goal-picker').classList.add('active');
+}
+
+function closeGoalPicker() {
+  document.getElementById('screen-goal-picker').classList.remove('active');
+}
+
+function renderGoalPickerList() {
+  var container = document.getElementById('goal-picker-list');
+  container.innerHTML = '';
+  for (var key in _roadmapGoals) {
+    var g = _roadmapGoals[key];
+    var active = key === _currentRoadmapGoal ? ' style="background:var(--primary-container);color:var(--on-primary-container)"' : '';
+    var item = document.createElement('div');
+    item.className = 'sched-search-item';
+    item.setAttribute('style', 'cursor:pointer');
+    item.innerHTML =
+      '<span class="mat-icon" style="font-size:20px;width:28px">' + (g.icon || 'flag') + '</span>' +
+      '<div class="sched-search-info">' +
+        '<div class="sched-search-title">' + g.name + '</div>' +
+        '<div class="sched-search-meta">' + g.diff + ' · ' + g.milestones.length + ' milestones</div>' +
+      '</div>' +
+      (active ? '<span class="mat-icon" style="font-size:18px;color:var(--primary)">check</span>' : '');
+    item.onclick = function(k) { return function() { selectRoadmapGoal(k); }; }(key);
+    container.appendChild(item);
+  }
+}
+
+function selectRoadmapGoal(id) {
+  closeGoalPicker();
+  _currentRoadmapGoal = id;
+  renderRoadmapMilestones();
+}
+
+// ═══════════════════════════════════════════════
+// Dynamic Journey Map (serpentine SVG trail)
+// ═══════════════════════════════════════════════
+
+var _DIF_COLORS = { easy:'#34d399', medium:'#60a5fa', hard:'#fbbf24', epic:'#f472b6' };
+var _DIF_CLASSES = { easy:'diff-easy', medium:'diff-medium', hard:'diff-hard', epic:'diff-epic' };
+var _J_W = 420, _J_PAD_X = 70, _J_PAD_Y = 90;
+
+function buildSerpentinePath(curves, w, h, padX, padY) {
+  var n = Math.max(2, curves);
+  var useH = h - 2 * padY;
+  var pts = [];
+  for (var i = 0; i < n; i++) {
+    var t = i / (n - 1);
+    pts.push({ x: i % 2 === 0 ? padX : w - padX, y: h - padY - t * useH });
+  }
+  var d = 'M ' + pts[0].x + ' ' + pts[0].y;
+  for (var i2 = 1; i2 < n; i2++) {
+    var p0 = pts[i2 - 1], p1 = pts[i2];
+    var cy = (p0.y + p1.y) / 2;
+    d += ' C ' + p0.x + ' ' + cy + ', ' + p1.x + ' ' + cy + ', ' + p1.x + ' ' + p1.y;
+  }
+  return { d: d, pts: pts };
+}
+
+function calcMilestoneStops(goal) {
+  var total = goal.milestones.reduce(function(s, m) { return s + (m.weight || 1); }, 0) || 1;
+  var acc = 0;
+  return goal.milestones.map(function(m) {
+    acc += m.weight || 1;
+    return { id: m.id, title: m.title, status: m.status, tasks: m.tasks, weight: m.weight, frac: acc / total };
+  });
+}
+
+function calcGoalProgress(goal) {
+  var total = goal.milestones.reduce(function(s, m) { return s + (m.weight || 1); }, 0);
+  if (total === 0) return 0;
+  var earned = 0;
+  goal.milestones.forEach(function(m) {
+    var w = m.weight || 1;
+    var done = m.tasks ? m.tasks.filter(function(t) { return t.done; }).length : 0;
+    var frac = m.tasks && m.tasks.length ? done / m.tasks.length : (m.status === 'done' ? 1 : m.status === 'active' ? 0.5 : 0);
+    earned += w * frac;
+  });
+  return earned / total;
+}
+
+function effectiveMilestoneStatus(m) {
+  if (m.tasks && m.tasks.length) {
+    var done = m.tasks.filter(function(t) { return t.done; }).length;
+    if (done === 0) return 'todo';
+    if (done === m.tasks.length) return 'done';
+    return 'active';
+  }
+  return m.status || 'todo';
+}
+
+function truncateLabel(s, n) {
+  n = n || 18;
+  return s.length > n ? s.slice(0, n - 1) + '…' : s;
+}
+
+function renderJourneyMap(goalId) {
+  var goal = _roadmapGoals[goalId];
+  if (!goal) return;
+
+  // Update header & stats
+  document.getElementById('jd-title').textContent = goal.name;
+  var diffEl = document.getElementById('jd-diff');
+  diffEl.textContent = goal.diff;
+  diffEl.className = 'gc-diff ' + (_DIF_CLASSES[goal.diff.toLowerCase()] || 'diff-medium');
+  document.getElementById('jd-why').textContent = '"' + (goal.why || 'No motivation set') + '"';
+
+  var stops = calcMilestoneStops(goal);
+  var progress = calcGoalProgress(goal);
+  var pct = Math.round(progress * 100);
+  document.getElementById('jd-progress').textContent = pct + '%';
+
+  // Days left
+  var daysLeft = '—';
+  if (goal.targetDate) {
+    var diffMs = new Date(goal.targetDate + 'T00:00:00') - new Date();
+    daysLeft = Math.max(0, Math.ceil(diffMs / 86400000));
+  }
+  document.getElementById('jd-days-left').textContent = daysLeft;
+
+  // Next up — first non-done milestone
+  var nextUp = '—';
+  for (var i = 0; i < stops.length; i++) {
+    if (effectiveMilestoneStatus(stops[i]) !== 'done') {
+      nextUp = stops[i].title;
+      break;
+    }
+  }
+  if (pct >= 100) nextUp = 'Done!';
+  document.getElementById('jd-next-up').textContent = nextUp;
+  document.getElementById('jd-next-up').style.fontSize = nextUp.length > 12 ? '14px' : '16px';
+
+  // Build scenic path
+  var numCurves = stops.length + 1;
+  var H = Math.max(620, 180 + stops.length * 150);
+  var pathData = buildSerpentinePath(numCurves, _J_W, H, _J_PAD_X, _J_PAD_Y);
+  var d = pathData.d;
+  var pts = pathData.pts;
+
+  // Compute pixel positions along the path (simulate getPointAtLength via linear interpolation)
+  // Use a simple approach: approximate by the anchor curve midpoints
+  // For a real app we'd use a hidden SVG path + getPointAtLength, but for a static preview
+  // we approximate positions from the cubic bezier segments.
+  function approxPathPositions(stopsArr, ptsArr, prog) {
+    // Build cumulative segment lengths (approximate)
+    var segs = [], totalLen = 0;
+    for (var s = 0; s < ptsArr.length - 1; s++) {
+      var segLen = Math.sqrt(Math.pow(ptsArr[s+1].x - ptsArr[s].x, 2) + Math.pow(ptsArr[s+1].y - ptsArr[s].y, 2));
+      segs.push(segLen);
+      totalLen += segLen;
+    }
+    function posAtFrac(f) {
+      var target = f * totalLen, cum = 0;
+      for (var si = 0; si < segs.length; si++) {
+        if (cum + segs[si] >= target || si === segs.length - 1) {
+          var tLocal = (target - cum) / segs[si];
+          return {
+            x: ptsArr[si].x + (ptsArr[si+1].x - ptsArr[si].x) * tLocal,
+            y: ptsArr[si].y + (ptsArr[si+1].y - ptsArr[si].y) * tLocal
+          };
+        }
+        cum += segs[si];
+      }
+      return ptsArr[ptsArr.length - 1];
+    }
+    var nodePositions = [];
+    for (var mi = 0; mi < stopsArr.length; mi++) {
+      var prevFrac = mi === 0 ? 0 : stopsArr[mi - 1].frac;
+      var mid = (prevFrac + stopsArr[mi].frac) / 2;
+      nodePositions.push({ id: stopsArr[mi].id, x: posAtFrac(mid).x, y: posAtFrac(mid).y, stop: stopsArr[mi] });
+    }
+    return { start: posAtFrac(0), finish: posAtFrac(1), marker: posAtFrac(prog), nodes: nodePositions, totalLen: totalLen };
+  }
+
+  var geo = approxPathPositions(stops, pts, progress);
+  if (!geo) return;
+
+  var diffColor = _DIF_COLORS[goal.diff.toLowerCase()] || '#60a5fa';
+  var gradId = 'grad_' + goalId;
+
+  var svg = '<svg viewBox="0 0 ' + _J_W + ' ' + H + '" style="max-height:400px;width:100%">' +
+    '<defs>' +
+      '<linearGradient id="' + gradId + '" x1="0" y1="1" x2="0" y2="0">' +
+        '<stop offset="0%" stop-color="#6366f1"/>' +
+        '<stop offset="100%" stop-color="' + diffColor + '"/>' +
+      '</linearGradient>' +
+      '<filter id="glow_' + goalId + '">' +
+        '<feGaussianBlur stdDeviation="4" result="b"/>' +
+        '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+      '</filter>' +
+    '</defs>' +
+    '<!-- background trail -->' +
+    '<path d="' + d + '" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="14" stroke-linecap="round" stroke-dasharray="2 22"/>' +
+    '<!-- completed trail -->' +
+    '<path d="' + d + '" fill="none" stroke="url(#' + gradId + ')" stroke-width="8" stroke-linecap="round" ' +
+      'stroke-dasharray="' + geo.totalLen + '" stroke-dashoffset="' + (geo.totalLen * (1 - progress)) + '" opacity="0.9"/>' +
+    '<!-- START -->' +
+    '<g transform="translate(' + geo.start.x + ',' + geo.start.y + ')">' +
+      '<circle r="14" fill="#6366f1" stroke="#a5b4fc" stroke-width="2"/>' +
+      '<text y="34" text-anchor="middle" fill="#cac4d0" font-size="11" font-weight="700" letter-spacing="1">START</text>' +
+    '</g>';
+
+  // Milestone nodes
+  geo.nodes.forEach(function(n, idx) {
+    var ms = n.stop;
+    var status = effectiveMilestoneStatus(ms);
+    var isDone = status === 'done';
+    var isActive = status === 'active';
+    var fill = isDone ? '#34d399' : isActive ? '#fbbf24' : '#232b45';
+    var stroke = isDone ? '#6ee7b7' : isActive ? '#fde68a' : 'rgba(255,255,255,0.25)';
+    var numColor = isDone || isActive ? '#0b1020' : '#cac4d0';
+    var content = isDone ? '✓' : (idx + 1);
+    var glowFilter = isActive ? 'filter="url(#glow_' + goalId + ')"' : '';
+    var lblX = n.x < _J_W / 2 ? (n.x + 32) : (n.x - 32);
+    var lblAnchor = n.x < _J_W / 2 ? 'start' : 'end';
+
+    svg +=
+      '<g transform="translate(' + n.x + ',' + n.y + ')" style="cursor:pointer" onclick="goToMilestone(\'' + goalId + '\',\'' + ms.id + '\')">' +
+        '<circle r="20" fill="' + fill + '" stroke="' + stroke + '" stroke-width="2" ' + glowFilter + '/>' +
+        '<text y="5" text-anchor="middle" fill="' + numColor + '" font-size="15" font-weight="800">' + content + '</text>' +
+        '<text x="' + (n.x < _J_W / 2 ? 32 : -32) + '" y="5" text-anchor="' + lblAnchor + '" fill="#e6e1e5" font-size="12" font-weight="600">' + truncateLabel(ms.title) + '</text>' +
+      '</g>';
+  });
+
+  // FINISH
+  svg +=
+    '<g transform="translate(' + geo.finish.x + ',' + geo.finish.y + ')">' +
+      '<circle r="16" fill="' + (progress >= 1 ? '#f472b6' : '#1e293b') + '" stroke="' + (progress >= 1 ? '#fbcfe8' : '#64748b') + '" stroke-width="2"/>' +
+      '<text y="6" text-anchor="middle" font-size="16">🏁</text>' +
+      '<text y="-26" text-anchor="middle" fill="#cac4d0" font-size="11" font-weight="700" letter-spacing="1">FINISH</text>' +
+    '</g>' +
+    '<!-- Traveller -->' +
+    '<g transform="translate(' + geo.marker.x + ',' + geo.marker.y + ')">' +
+      '<circle r="13" fill="' + diffColor + '" opacity="0.5"/>' +
+      '<circle r="9" fill="#fff"/>' +
+    '</g>' +
+    '</svg>';
+
+  document.getElementById('journey-map-container').innerHTML = svg;
+}
+
+function getStarStr(n) {
+  return '★'.repeat(n) + '☆'.repeat(5 - n);
+}
+
+function renderRoadmapMilestones() {
+  var goal = _roadmapGoals[_currentRoadmapGoal];
+  if (!goal) return;
+  document.getElementById('roadmap-goal-name').textContent = goal.name;
+  var diffEl = document.getElementById('roadmap-goal-diff');
+  diffEl.textContent = goal.diff;
+  diffEl.className = 'gc-diff ' + goal.diffClass;
+
+  // Weighted progress: Σ(weight × completion) / Σ(weight)
+  var totalWeight = 0, earned = 0;
+  goal.milestones.forEach(function(ms) {
+    var w = ms.weight || 1;
+    totalWeight += w;
+    var doneCount = ms.tasks.filter(function(t) { return t.done; }).length;
+    var frac = ms.tasks.length ? doneCount / ms.tasks.length : (ms.status === 'done' ? 1 : ms.status === 'active' ? 0.5 : 0);
+    earned += w * frac;
+  });
+  var pct = totalWeight ? Math.round(earned / totalWeight * 100) : 0;
+  document.getElementById('roadmap-goal-progress').textContent = pct + '%';
+
+  var container = document.getElementById('roadmap-ms-list');
+  container.innerHTML = '';
+
+  goal.milestones.forEach(function(ms) {
+    var statusIcon = ms.status === 'done' ? 'check' : ms.status === 'active' ? 'more_horiz' : 'radio_button_unchecked';
+    var doneCount = ms.tasks.filter(function(t) { return t.done; }).length;
+    var meta = getStarStr(ms.weight || 1) + ' · ' + doneCount + '/' + ms.tasks.length + ' tasks';
+
+    var bodyStyle = ms.status === 'todo' ? ' style="display:block"' : '';
+
+    var tasksHtml = '';
+    ms.tasks.forEach(function(t, idx) {
+      var cls = t.done ? 'done' : '';
+      var checkIcon = t.done ? 'check' : '';
+      tasksHtml += '<div class="task-row">' +
+        '<div class="task-check ' + cls + '" onclick="this.classList.toggle(\'done\');this.innerHTML=this.classList.contains(\'done\')?\'check\':\'\'">' + checkIcon + '</div>' +
+        '<span class="task-title ' + cls + '" contenteditable="true" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur()}">' + t.text + '</span>' +
+        '<button class="task-del" onclick="this.closest(\'.task-row\').remove()">close</button>' +
+      '</div>';
+    });
+
+    tasksHtml += '<div class="add-task-row"><input class="add-task-input" placeholder="Add a task…" onkeydown="if(event.key===\'Enter\'&&this.value.trim())addTask(this)" /></div>';
+
+    container.innerHTML +=
+      '<div class="ms-card" data-id="' + ms.id + '">' +
+        '<div class="ms-header" onclick="toggleMS(this)">' +
+          '<div class="ms-status ' + ms.status + '">' + statusIcon + '</div>' +
+          '<div class="ms-info"><div class="ms-title">' + ms.title + '</div><div class="ms-meta">' + meta + '</div></div>' +
+          '<span class="ms-chevron">expand_more</span>' +
+        '</div>' +
+        '<div class="ms-body"' + bodyStyle + '>' + tasksHtml + '</div>' +
+      '</div>';
+  });
+}
+
+// Init roadmap on load
+(function initRoadmap() { renderRoadmapMilestones(); })();
+
+// Momentum
+var _currentMomentumGoal = 'flutter';
+
+function renderMomentum() {
+  var goal = _roadmapGoals[_currentMomentumGoal];
+  if (!goal) return;
+  document.getElementById('mom-goal-name').textContent = goal.name;
+  var m = goal.momentum;
+  if (!m) return;
+  var container = document.getElementById('mom-list');
+
+  // Compute totals for progress bar sub-text
+  var totalTaskCount = 0, doneCount = 0;
+  goal.milestones.forEach(function(ms) {
+    ms.tasks.forEach(function(t) { totalTaskCount++; if (t.done) doneCount++; });
+  });
+
+  // Weighted progress: Σ(weight × completion) / Σ(weight)
+  var totalWeight = 0, earned = 0;
+  goal.milestones.forEach(function(ms) {
+    var w = ms.weight || 1;
+    totalWeight += w;
+    var dc = ms.tasks.filter(function(t) { return t.done; }).length;
+    var frac = ms.tasks.length ? dc / ms.tasks.length : (ms.status === 'done' ? 1 : ms.status === 'active' ? 0.5 : 0);
+    earned += w * frac;
+  });
+  var pct = totalWeight ? Math.round(earned / totalWeight * 100) : 0;
+
+  // Pacing: compare actual progress vs expected linear progress
+  var now = new Date();
+  var created = goal.createdAt ? new Date(goal.createdAt + 'T00:00:00') : now;
+  var target = goal.targetDate ? new Date(goal.targetDate + 'T00:00:00') : now;
+  var totalDays = (target - created) / 86400000;
+  var elapsedDays = (now - created) / 86400000;
+  var expected = totalDays > 0 ? Math.min(Math.max(elapsedDays / totalDays, 0), 1) : 1;
+  var delta = (pct / 100) - expected;
+
+  var pacingLabel, pacingColor, timeElapsedPct;
+  if (delta < -0.1) { pacingLabel = 'Behind'; pacingColor = '#f28b82'; }
+  else if (delta > 0.1) { pacingLabel = 'Ahead'; pacingColor = '#81c995'; }
+  else { pacingLabel = 'On Track'; pacingColor = '#fbbf24'; }
+  timeElapsedPct = Math.round(expected * 100);
+
+  container.innerHTML =
+    '<div class="momentum-card">' +
+      '<div class="mc-row">' +
+        '<span class="mc-icon">local_fire_department</span>' +
+        '<div class="mc-info">' +
+          '<div class="mc-label">Streak</div>' +
+          '<div class="mc-value">' + m.streak + ' day' + (m.streak !== 1 ? 's' : '') + '</div>' +
+          '<div class="mc-sub">' + (m.streak > 0 ? 'Keep it going!' : 'Start your streak today') + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="momentum-card">' +
+      '<div class="mc-row">' +
+        '<span class="mc-icon">track_changes</span>' +
+        '<div class="mc-info">' +
+          '<div class="mc-label">Progress</div>' +
+          '<div class="mc-value" style="font-size:32px">' + pct + '%</div>' +
+          '<div class="mc-sub" style="margin-top:6px">' +
+            '<div style="height:4px;background:var(--surface-high);border-radius:99px;overflow:hidden;margin-bottom:4px">' +
+              '<div style="height:100%;width:' + pct + '%;background:var(--primary);border-radius:99px;transition:width 0.4s"></div>' +
+            '</div>' +
+            doneCount + '/' + totalTaskCount + ' tasks · weighted by milestone effort' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="momentum-card">' +
+      '<div class="mc-row">' +
+        '<span class="mc-icon">schedule</span>' +
+        '<div class="mc-info">' +
+          '<div class="mc-label">Pacing</div>' +
+          '<div class="mc-value" style="color:' + pacingColor + '">' + pacingLabel + '</div>' +
+          '<div class="mc-sub">' + pct + '% done · ' + timeElapsedPct + '% of time elapsed' +
+            (delta < -0.1 ? ' — pick up the pace!' : delta > 0.1 ? ' — great work!' : '') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div style="margin-top:16px;font-size:11px;color:#cac4d0;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Activity Log</div>';
+
+  if (m.activity && m.activity.length) {
+    m.activity.forEach(function(a) {
+      container.innerHTML +=
+        '<div class="event-item">' +
+          '<div class="event-dot"></div>' +
+          '<div><div class="event-text">' + a.text + '</div><div class="event-time">' + a.time + '</div></div>' +
+        '</div>';
+    });
+  } else {
+    container.innerHTML += '<div style="font-size:13px;color:var(--text-tertiary);padding:8px 0">No recent activity</div>';
+  }
+}
+
+function toggleMomFab() {
+  var container = document.getElementById('mom-fab-switch').parentElement;
+  container.classList.toggle('open');
+  if (container.classList.contains('open')) {
+    setTimeout(function() {
+      document.addEventListener('click', function closeMomFab(e) {
+        if (!container.contains(e.target)) {
+          container.classList.remove('open');
+          document.removeEventListener('click', closeMomFab);
+        }
+      }, { once: true });
+    }, 0);
+  }
+}
+
+function openMomentumGoalPicker() {
+  document.getElementById('mom-fab-switch').parentElement.classList.remove('open');
+  renderMomentumGoalPickerList();
+  document.getElementById('screen-goal-picker').classList.add('active');
+}
+
+function renderMomentumGoalPickerList() {
+  var container = document.getElementById('goal-picker-list');
+  container.innerHTML = '';
+  for (var key in _roadmapGoals) {
+    var g = _roadmapGoals[key];
+    var active = key === _currentMomentumGoal ? ' style="background:var(--primary-container);color:var(--on-primary-container)"' : '';
+    var item = document.createElement('div');
+    item.className = 'sched-search-item';
+    item.setAttribute('style', 'cursor:pointer');
+    var m = g.momentum || {};
+
+    // Compute progress for this goal
+    var tw = 0, er = 0;
+    (g.milestones || []).forEach(function(ms) {
+      var w = ms.weight || 1;
+      tw += w;
+      var dc = ms.tasks ? ms.tasks.filter(function(t) { return t.done; }).length : 0;
+      var fr = ms.tasks && ms.tasks.length ? dc / ms.tasks.length : (ms.status === 'done' ? 1 : ms.status === 'active' ? 0.5 : 0);
+      er += w * fr;
+    });
+    var progPct = tw ? Math.round(er / tw * 100) : 0;
+
+    item.innerHTML =
+      '<span class="mat-icon" style="font-size:20px;width:28px">' + (g.icon || 'flag') + '</span>' +
+      '<div class="sched-search-info">' +
+        '<div class="sched-search-title">' + g.name + '</div>' +
+        '<div class="sched-search-meta">' + (m.streak || 0) + ' day streak · ' + progPct + '% complete</div>' +
+      '</div>' +
+      (active ? '<span class="mat-icon" style="font-size:18px;color:var(--primary)">check</span>' : '');
+    item.onclick = function(k) { return function() { closeGoalPicker(); _currentMomentumGoal = k; renderMomentum(); }; }(key);
+    container.appendChild(item);
+  }
+}
+
+// Init momentum on load
+(function initMomentum() { renderMomentum(); })();
+
+function toggleMsFab() {
+  var container = document.getElementById('ms-fab-add').parentElement;
+  container.classList.toggle('open');
+  if (container.classList.contains('open')) {
+    setTimeout(function() {
+      document.addEventListener('click', function closeMsFab(e) {
+        if (!container.contains(e.target)) {
+          container.classList.remove('open');
+          document.removeEventListener('click', closeMsFab);
+        }
+      }, { once: true });
+    }, 0);
+  }
+}
+
+function openMilestoneSearch() {
+  document.getElementById('ms-fab-add').parentElement.classList.remove('open');
+  document.getElementById('screen-ms-search').classList.add('active');
+  document.getElementById('ms-search-input').value = '';
+  document.getElementById('ms-search-results').innerHTML = '';
+  setTimeout(function() { document.getElementById('ms-search-input').focus(); }, 100);
+}
+
+function closeMilestoneSearch() {
+  document.getElementById('screen-ms-search').classList.remove('active');
+}
+
+function filterMilestoneSearch(query) {
+  var container = document.getElementById('ms-search-results');
+  container.innerHTML = '';
+  if (!query.trim()) return;
+  var goal = _roadmapGoals[_currentRoadmapGoal];
+  if (!goal) return;
+  var q = query.toLowerCase();
+  var matches = goal.milestones.filter(function(t) { return t.title.toLowerCase().includes(q); });
+  if (matches.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:24px 0;color:var(--text-tertiary);font-size:13px">No milestones found</div>';
+    return;
+  }
+  matches.forEach(function(t) {
+    var doneCount = t.tasks.filter(function(t2) { return t2.done; }).length;
+    var meta = getStarStr(t.weight || 1) + ' · ' + doneCount + '/' + t.tasks.length + ' tasks';
+    var card = document.createElement('div');
+    card.className = 'sched-search-item';
+    card.onclick = function() {
+      closeMilestoneSearch();
+    };
+    card.innerHTML =
+      '<div class="sched-search-info">' +
+        '<div class="sched-search-title">' + t.title + '</div>' +
+        '<div class="sched-search-meta">' + meta + '</div>' +
+      '</div>';
+    container.appendChild(card);
+  });
+}
+
+function openMilestoneForm() {
+  document.getElementById('screen-milestone-form').classList.add('active');
+}
+
+function closeMilestoneForm() {
+  document.getElementById('screen-milestone-form').classList.remove('active');
+  document.getElementById('ms-title-input').value = '';
+  document.querySelectorAll('.weight-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.weight-btn').classList.add('active');
+}
+
+function selectWeight(el, val) {
+  document.querySelectorAll('.weight-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function addTask(input) {
+  const row = document.createElement('div');
+  row.className = 'task-row';
+  row.innerHTML = '<div class="task-check" onclick="this.classList.toggle(\'done\');this.innerHTML=this.classList.contains(\'done\')?\'check\':\'\'"> </div><span class="task-title" contenteditable="true" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur()}">' + input.value.trim() + '</span><button class="task-del" onclick="this.closest(\'.task-row\').remove()">close</button>';
+  input.parentElement.insertAdjacentElement('beforebegin', row);
+  input.value = '';
+}
+
+function openAchievements() {
+  document.getElementById('screen-achievements').classList.add('active');
+}
+
+function closeAchievements() {
+  document.getElementById('screen-achievements').classList.remove('active');
+}
+
+let currentTheme = 'midnight';
+
+function openThemePicker() {
+  document.getElementById('screen-theme').classList.add('active');
+}
+
+function closeThemePicker() {
+  document.getElementById('screen-theme').classList.remove('active');
+}
+
+function selectTheme(name) {
+  const frame = document.querySelector('.device-frame');
+  const val = document.getElementById('theme-value');
+  currentTheme = name;
+  frame.className = 'device-frame';
+  if (name !== 'midnight') {
+    frame.classList.add('theme-' + name);
+  }
+  if (name === 'cream') {
+    frame.classList.add('light-mode');
+  }
+  val.textContent = name.charAt(0).toUpperCase() + name.slice(1).replace('-', ' ');
+  document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
+  document.querySelector(`.theme-option[onclick*="${name}"]`).classList.add('active');
+  closeThemePicker();
+}
+
+// ========== Schedule functions ==========
+
+function filterSchedule(btn, freq) {
+  document.querySelectorAll('.sched-filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.sched-card').forEach(c => {
+    if (freq === 'all') { c.style.display = ''; return; }
+    c.style.display = c.dataset.freq === freq ? '' : 'none';
+  });
+}
+
+let schedCalOffset = 0;
+
+function showScheduleDetail(el) {
+  document.getElementById('screen-schedule').classList.remove('active');
+  document.getElementById('screen-sched-detail').style.display = 'flex';
+  document.getElementById('screen-sched-detail').classList.add('active');
+  document.getElementById('sched-dropdown').classList.remove('active');
+  schedCalOffset = 0;
+  renderSchedCalendar();
+}
+
+function closeScheduleDetail() {
+  document.getElementById('screen-sched-detail').style.display = 'none';
+  document.getElementById('screen-sched-detail').classList.remove('active');
+  document.getElementById('screen-schedule').classList.add('active');
+}
+
+function toggleSchedDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('sched-dropdown');
+  dd.classList.toggle('active');
+  setTimeout(() => document.addEventListener('click', () => dd.classList.remove('active'), { once: true }), 0);
+}
+
+function editScheduleTask() {
+  document.getElementById('sched-dropdown').classList.remove('active');
+  document.querySelector('#screen-sched-form .modal-title').textContent = 'Edit Scheduled Task';
+  openScheduleForm();
+}
+
+function deleteScheduleTask() {
+  document.getElementById('sched-dropdown').classList.remove('active');
+  document.getElementById('confirm-sched-overlay').classList.add('active');
+}
+
+function closeSchedDeleteConfirm() {
+  document.getElementById('confirm-sched-overlay').classList.remove('active');
+}
+
+function confirmSchedDelete() {
+  document.getElementById('confirm-sched-overlay').classList.remove('active');
+  document.getElementById('screen-sched-detail').style.display = 'none';
+  document.getElementById('screen-sched-detail').classList.remove('active');
+  document.getElementById('screen-schedule').classList.add('active');
+}
+
+function toggleSchedFab() {
+  const container = document.getElementById('sched-fab-main').parentElement;
+  container.classList.toggle('open');
+  if (container.classList.contains('open')) {
+    setTimeout(() => {
+      document.addEventListener('click', function closeSchedFab(e) {
+        if (!container.contains(e.target)) {
+          container.classList.remove('open');
+          document.removeEventListener('click', closeSchedFab);
+        }
+      }, { once: true });
+    }, 0);
+  }
+}
+
+function openScheduleForm() {
+  document.getElementById('sched-fab-main').parentElement.classList.remove('open');
+  document.getElementById('screen-sched-form').classList.add('active');
+}
+
+function openScheduleSearch() {
+  document.getElementById('sched-fab-main').parentElement.classList.remove('open');
+  document.getElementById('screen-sched-search').classList.add('active');
+  document.getElementById('sched-search-input').value = '';
+  document.getElementById('sched-search-results').innerHTML = '';
+  setTimeout(() => document.getElementById('sched-search-input').focus(), 100);
+}
+
+function closeScheduleSearch() {
+  document.getElementById('screen-sched-search').classList.remove('active');
+}
+
+var _schedSearchData = [
+  { title: 'Morning Workout', meta: 'Daily · 8:00 AM', freq: 'daily' },
+  { title: 'Read 30 mins', meta: 'Daily · 9:00 PM', freq: 'daily' },
+  { title: 'Team Standup', meta: 'Weekly · Mon, Wed, Fri · 10:00 AM', freq: 'weekly' },
+  { title: 'Pay Bills', meta: 'Monthly · 1st', freq: 'monthly' },
+  { title: 'Birthday Party', meta: 'Yearly · Jun 23', freq: 'yearly' },
+];
+
+function filterScheduleSearch(query) {
+  var container = document.getElementById('sched-search-results');
+  container.innerHTML = '';
+  if (!query.trim()) return;
+  var q = query.toLowerCase();
+  var matches = _schedSearchData.filter(function(t) { return t.title.toLowerCase().includes(q); });
+  if (matches.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:24px 0;color:var(--text-tertiary);font-size:13px">No tasks found</div>';
+    return;
+  }
+  matches.forEach(function(t) {
+    var card = document.createElement('div');
+    card.className = 'sched-search-item';
+    card.setAttribute('data-freq', t.freq);
+    card.onclick = function() {
+      closeScheduleSearch();
+      var detailTitle = document.querySelector('#screen-sched-detail .jd-title');
+      if (detailTitle) detailTitle.textContent = t.title;
+      document.getElementById('screen-sched-detail').style.display = 'flex';
+      document.getElementById('screen-sched-detail').classList.add('active');
+      document.getElementById('screen-schedule').classList.remove('active');
+    };
+    card.innerHTML =
+      '<div class="sched-search-info">' +
+        '<div class="sched-search-title">' + t.title + '</div>' +
+        '<div class="sched-search-meta">' + t.meta + '</div>' +
+      '</div>' +
+      '<span class="sched-freq-badge sched-freq-' + t.freq + '">' + t.freq.charAt(0).toUpperCase() + t.freq.slice(1) + '</span>';
+    container.appendChild(card);
+  });
+}
+
+function closeScheduleForm() {
+  document.getElementById('screen-sched-form').classList.remove('active');
+  document.querySelector('#screen-sched-form .modal-title').textContent = 'New Scheduled Task';
+}
+
+function selectSchedFreq(el, freq) {
+  document.querySelectorAll('.sched-freq-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('sched-weekly-section').style.display = freq === 'weekly' ? 'block' : 'none';
+  document.getElementById('sched-monthly-section').style.display = freq === 'monthly' ? 'block' : 'none';
+  document.getElementById('sched-yearly-section').style.display = freq === 'yearly' ? 'block' : 'none';
+}
+
+function toggleSchedEndType(el) {
+  document.getElementById('sched-end-n').style.display = el.value === 'after_n' ? 'block' : 'none';
+  document.getElementById('sched-end-date').style.display = el.value === 'on_date' ? 'block' : 'none';
+}
+
+function renderSchedCalendar() {
+  const grid = document.getElementById('sched-cal-grid');
+  const monthLabel = document.getElementById('sched-cal-month');
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + schedCalOffset;
+  const d = new Date(year, month, 1);
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  monthLabel.textContent = monthNames[d.getMonth()] + ' ' + d.getFullYear();
+
+  const firstDay = d.getDay();
+  const daysInMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  const today = now.getDate();
+
+  // Keep day headers
+  let html = '';
+  'SMTWTFS'.split('').forEach(l => {
+    html += '<span class="sd-cal-day-header">' + l + '</span>';
+  });
+
+  const sampleDone = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,17,19,20,21,22];
+  const sampleMissed = [4,11,18];
+
+  const todayNum = today;
+
+  for (let i = 0; i < firstDay; i++) {
+    html += '<span class="sd-cal-cell other-month"></span>';
+  }
+  for (let day = 1; day <= daysInMonth; day++) {
+    let cls = 'sd-cal-cell';
+    const isToday = (day === todayNum && schedCalOffset === 0);
+    const isFuture = (schedCalOffset > 0) || (schedCalOffset === 0 && day > todayNum);
+    if (isToday) cls += ' today';
+    if (sampleDone.includes(day)) cls += ' done';
+    else if (sampleMissed.includes(day)) cls += ' missed';
+    else if (isToday) cls += ' pending';
+
+    if (isFuture) {
+      cls += ' future-locked';
+      html += '<span class="' + cls + '">' + day + '</span>';
+    } else {
+      html += '<span class="' + cls + '" onclick="schedCalToggle(this)">' + day + '</span>';
+    }
+  }
+  grid.innerHTML = html;
+}
+
+function schedCalNav(dir) {
+  schedCalOffset += dir;
+  renderSchedCalendar();
+}
+
+function schedCalToggle(el) {
+  // Rules:
+  // - Future-locked cells: do nothing
+  // - Today's cell: toggle pending ↔ done, sync Recent Activity
+  // - Past done cells: stays done (no toggle back)
+  // - Past missed cells: open reason dialog (can't become done)
+
+  if (el.classList.contains('future-locked')) return;
+  if (el.classList.contains('done')) return;
+
+  if (el.classList.contains('missed')) {
+    openMissedReason(el);
+    return;
+  }
+
+  if (el.classList.contains('today')) {
+    el.classList.remove('pending');
+    el.classList.add('done');
+
+    // Sync Recent Activity
+    const statusEl = document.getElementById('sched-today-status');
+    if (statusEl) {
+      statusEl.className = 'sd-instance-status done';
+      statusEl.style.color = '#81c995';
+      statusEl.textContent = 'Done';
+    }
+    const hintEl = document.querySelector('#sched-today-row span:last-child');
+    if (hintEl) hintEl.textContent = 'Just now';
+  }
+}
+
+function markToday(el) {
+  // Mark today's task done in the list view (only works for today)
+  if (!el.classList.contains('done')) {
+    el.classList.add('done');
+    el.textContent = 'check';
+  }
+}
+
+function openMissedReason(el) {
+  document.getElementById('screen-skip-reason').classList.add('active');
+  // Store reference to the missed element so we can update it
+  window._missedTarget = el;
+}
+
+function closeSkipReason() {
+  document.getElementById('screen-skip-reason').classList.remove('active');
+  document.getElementById('sched-reason-presets').style.display = 'flex';
+  document.getElementById('sched-reason-custom').style.display = 'none';
+  document.getElementById('sched-custom-reason-input').value = '';
+  window._missedTarget = null;
+}
+
+function selectSkipReason(btn, reason, customLabel) {
+  const labels = { vacation: 'Vacation', sick: 'Sick', busy: 'Busy' };
+  if (window._missedTarget) {
+    const el = window._missedTarget;
+    // Calendar cell stays marked as missed (no visual change needed)
+
+    // Sync Recent Activity: update the row for this date
+    const dayNum = parseInt(el.textContent);
+    const rows = document.querySelectorAll('.sd-instance-item');
+    for (const row of rows) {
+      const dateSpan = row.querySelector('.sd-instance-date');
+      if (dateSpan && dateSpan.textContent.includes(String(dayNum)) && !dateSpan.textContent.includes('Today')) {
+        const labelEl = row.querySelector('span:last-child');
+        if (labelEl && !labelEl.textContent.includes('Today')) {
+          if (customLabel) {
+            labelEl.innerHTML = '<span class="sched-reason-custom-icon" data-msg="' + customLabel.replace(/"/g,'&quot;') + '">info</span>';
+          } else {
+            labelEl.textContent = labels[reason] || 'Other';
+          }
+        }
+        break;
+      }
+    }
+  }
+  closeSkipReason();
+}
+
+function openCustomReason() {
+  document.getElementById('sched-reason-presets').style.display = 'none';
+  document.getElementById('sched-reason-custom').style.display = 'flex';
+  document.getElementById('sched-custom-reason-input').focus();
+}
+
+function closeCustomReason() {
+  document.getElementById('sched-reason-presets').style.display = 'flex';
+  document.getElementById('sched-reason-custom').style.display = 'none';
+  document.getElementById('sched-custom-reason-input').value = '';
+}
+
+function submitCustomReason() {
+  const val = document.getElementById('sched-custom-reason-input').value.trim();
+  if (!val) return;
+  selectSkipReason(null, 'other', val);
+}
+
+document.addEventListener('click', function(e) {
+  // Remove existing tooltip
+  var oldTip = document.querySelector('.sched-reason-tooltip');
+  if (oldTip) oldTip.remove();
+
+  var icon = e.target.closest('.sched-reason-custom-icon');
+  if (icon) {
+    e.stopPropagation();
+    var msg = icon.getAttribute('data-msg') || '…';
+    var tip = document.createElement('div');
+    tip.className = 'sched-reason-tooltip';
+    tip.textContent = msg;
+    document.body.appendChild(tip);
+
+    var rect = icon.getBoundingClientRect();
+    var tipTop = rect.top - 8;
+    var tipLeft = rect.left + rect.width / 2;
+    tip.style.top = Math.max(4, tipTop - tip.offsetHeight) + 'px';
+    tip.style.left = Math.max(4, tipLeft - tip.offsetWidth / 2) + 'px';
+  }
+});
+</script>
+
+
+
+</body>
+</html>
